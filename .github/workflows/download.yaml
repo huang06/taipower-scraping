@@ -2,8 +2,8 @@
 name: download power info
 
 on:
-  # schedule:
-  #   - cron: '*/10 * * * *'
+  schedule:
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 jobs:
