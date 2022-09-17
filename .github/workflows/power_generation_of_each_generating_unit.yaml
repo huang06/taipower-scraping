@@ -1,5 +1,5 @@
 ---
-name: Web Scraping
+name: Power Generation of Each Generating Unit
 
 on:
   schedule:
@@ -20,7 +20,7 @@ jobs:
       - name: Python
         run: |
           python3 -m pip install -r requirements.txt
-          python3 download_each_generating_unit.py
+          python3 power_generation_of_each_generating_unit.py
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
