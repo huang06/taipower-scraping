@@ -38,8 +38,9 @@ python3 -m pip install -r requirements.txt
 python3 -m pip install -r requirements-dev.txt
 ```
 
-Run the follwoing script. The script fetches HTML source code from the Taipower website and save to the `data/<%Y%m%d>/<%Y%m%d%H%M>.html`.
+### Git
 
 ```bash
-python3 download_each_generating_unit.py
+pre-commit install
+pre-commit install -t commit-msg
 ```
