@@ -28,7 +28,7 @@ driver.get(cht_url)
 datetime_ = datetime.datetime.strptime(
     driver.find_element(By.ID, "datetime").text, "%Y-%m-%d %H:%M"
 )  # '2022-09-17 16:40'
-print(f"Updated - {datetime_}")
+logger.info("Updated - %s", datetime_)
 
 html = driver.page_source
 
