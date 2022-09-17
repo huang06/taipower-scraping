@@ -4,9 +4,13 @@ Scraping real-time power information from Taipower website.
 
 ## Motivation
 
-[Taipower](https://www.taipower.com.tw) displays Taiwan's electricity consumption information and power generation information every 10 minutes on its website. However, the official currently does not provide historical records for downloading.
+[Taipower](https://www.taipower.com.tw) updates Taiwan's electricity consumption information and power generation information every 10 minutes on its website. However, the official currently does not provide historical records for downloading.
 
-Therefore, I set up GitHub actions to fetch website data every 10 minutes and save to this repository for further analysis usage.
+Therefore, I set up GitHub actions to fetch the power data every 10 minutes and save to this repository for further analysis usage.
+
+## TODO
+
+- [GitHub Action] wait for N seconds until the Selenium service is ready.
 
 ## Development Guide
 
