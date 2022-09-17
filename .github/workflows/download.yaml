@@ -1,13 +1,13 @@
 ---
-name: download each generating unit
+name: download power info
 
 on:
-  schedule:
-    - cron: '*/10 * * * *'
+  # schedule:
+  #   - cron: '*/10 * * * *'
   workflow_dispatch:
 
 jobs:
-  report:
+  download-power-info:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
