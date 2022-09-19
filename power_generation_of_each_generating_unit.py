@@ -26,6 +26,7 @@ try:
     cht_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/genshx_.html?mid=206&cid=406&cchk=b6134cc6-838c-4bb9-b77a-0b0094afd49d"  # noqa: E501
     eng_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/genshx_e.html?mid=4484&cid=2834&cchk=20432baa-1f39-4018-aed8-7b33b02f942e"  # noqa: E501
     driver.get(cht_url)
+    driver.implicitly_wait(5)
 
     datetime_repr = (
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text

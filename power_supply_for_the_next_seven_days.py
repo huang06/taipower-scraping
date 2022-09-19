@@ -26,6 +26,7 @@ try:
     logger.info("Connecting to the page")
     cht_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/load_forecast_.html?mid=209&cid=357&cchk=2fd2f12d-f009-43c5-9a41-150e39c214b9"  # noqa: E501
     driver.get(cht_url)
+    driver.implicitly_wait(5)
 
     datetime_repr = (
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text
