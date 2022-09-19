@@ -8,10 +8,6 @@ Scraping real-time power information from Taipower website.
 
 Therefore, I set up GitHub actions to fetch the power data every 10 minutes and save to this repository for further analysis usage.
 
-## TODO
-
-- [GitHub Action] wait for N seconds until the Selenium service is ready.
-
 ## Development Guide
 
 ### Prerequisites
