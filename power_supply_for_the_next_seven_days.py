@@ -27,9 +27,11 @@ try:
     cht_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/load_forecast_.html?mid=209&cid=357&cchk=2fd2f12d-f009-43c5-9a41-150e39c214b9"  # noqa: E501
     driver.get(cht_url)
 
-    year, month, day = (
-        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text.split("/")
+    datetime_repr = (
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text
     )  # '111/09/17'
+    logger.info(datetime_repr)
+    year, month, day = datetime_repr.split("/")
     datetime_ = datetime.datetime.strptime(f"{int(year)+1911}-{month}-{day}", "%Y-%m-%d")
 
     logger.info("Updated - %s", datetime_)
