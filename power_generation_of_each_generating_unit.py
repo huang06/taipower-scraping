@@ -5,6 +5,8 @@ import pathlib
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(
@@ -25,9 +27,10 @@ try:
     eng_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/genshx_e.html?mid=4484&cid=2834&cchk=20432baa-1f39-4018-aed8-7b33b02f942e"  # noqa: E501
     driver.get(cht_url)
 
-    datetime_ = datetime.datetime.strptime(
-        driver.find_element(By.ID, "datetime").text, "%Y-%m-%d %H:%M"
+    datetime_repr = (
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text
     )  # '2022-09-17 16:40'
+    datetime_ = datetime.datetime.strptime(datetime_repr, "%Y-%m-%d %H:%M")
     logger.info("Updated - %s", datetime_)
 
     html = driver.page_source

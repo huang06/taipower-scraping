@@ -6,6 +6,8 @@ import pathlib
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(
@@ -25,7 +27,9 @@ try:
     cht_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/load_forecast_.html?mid=209&cid=357&cchk=2fd2f12d-f009-43c5-9a41-150e39c214b9"  # noqa: E501
     driver.get(cht_url)
 
-    year, month, day = driver.find_element(By.ID, "datetime").text.split("/")  # '111/09/17'
+    year, month, day = (
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text.split("/")
+    )  # '111/09/17'
     datetime_ = datetime.datetime.strptime(f"{int(year)+1911}-{month}-{day}", "%Y-%m-%d")
 
     logger.info("Updated - %s", datetime_)
