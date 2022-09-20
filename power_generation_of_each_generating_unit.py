@@ -31,6 +31,7 @@ try:
     datetime_repr = (
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text
     )  # '2022-09-17 16:40'
+    logger.info(f"{datetime_repr=}")
     datetime_ = datetime.datetime.strptime(datetime_repr, "%Y-%m-%d %H:%M")
     logger.info("Updated - %s", datetime_)
 
