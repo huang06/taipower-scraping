@@ -17,10 +17,10 @@ Therefore, I set up GitHub actions to fetch the power data every 10 minutes and 
 
 ### Selenium Grid
 
-Start a Docker container with Firefox.
+Start a Selenium Grid container.
 
 ```bash
-docker run -d -p 4444:4444 --shm-size="2g" docker.io/selenium/standalone-firefox:4.4.0
+make selenium
 ```
 
 For detailed usage of Selenium Grid, see <https://github.com/SeleniumHQ/docker-selenium>.
@@ -28,7 +28,7 @@ For detailed usage of Selenium Grid, see <https://github.com/SeleniumHQ/docker-s
 ### Python
 
 ```bash
-python3 -m pipenv
+python3 -m pip install pipenv
 pipenv sync --dev -v
 ```
 
@@ -37,4 +37,10 @@ pipenv sync --dev -v
 ```bash
 pre-commit install
 pre-commit install -t commit-msg
+```
+
+### Cleanup
+
+```bash
+make clean
 ```
