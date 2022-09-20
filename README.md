@@ -28,11 +28,8 @@ For detailed usage of Selenium Grid, see <https://github.com/SeleniumHQ/docker-s
 ### Python
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python3 -m pip install -U pip setuptools wheel
-python3 -m pip install -r requirements.txt
-python3 -m pip install -r requirements-dev.txt
+python3 -m pipenv
+pipenv sync --dev -v
 ```
 
 ### Git
