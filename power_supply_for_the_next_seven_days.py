@@ -1,4 +1,3 @@
-# %load ./power_supply_for_the_next_seven_days.py
 import datetime
 import logging
 import os
@@ -31,10 +30,9 @@ try:
     datetime_repr = (
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text
     )  # '111/09/17'
-    logger.info(datetime_repr)
+    logger.info(f"{datetime_repr=}")
     year, month, day = datetime_repr.split("/")
     datetime_ = datetime.datetime.strptime(f"{int(year)+1911}-{month}-{day}", "%Y-%m-%d")
-
     logger.info("Updated - %s", datetime_)
 
     html = driver.page_source
