@@ -15,11 +15,9 @@ jobs:
         with:
           python-version: '3.10'
       - name: Launch Selenium hub
-        run: docker run -d -p 4444:4444 --shm-size="2g" docker.io/selenium/standalone-firefox:4.4.0
+        run: make selenium
       - name: Install Python packages
-        run: |
-          python3 -m pip install pipenv
-          pipenv sync --system
+        run: make python-ci
       - name: Run scraper
         run: python3 power_supply_for_the_next_seven_days.py
       - name: Commit & Push changes

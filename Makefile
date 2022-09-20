@@ -1,5 +1,4 @@
 SHELL=/bin/bash
-PYTHON="$(shell pwd)/.venv/bin/python3"
 
 .PHONY: all
 all:
@@ -7,10 +6,13 @@ all:
 .PHONY: python-venv
 python-venv:
 	rm -rf .venv
-	python3 -m venv .venv
-	$(PYTHON) -V
-	$(PYTHON) -m pip install -U pip setuptools wheel
-	$(PYTHON) -m pip install -r requirements.txt
+	python3 -m pip install pipenv
+	PIPENV_VENV_IN_PROJECT=1 pipenv sync
+
+.PHONY: python-ci
+python-ci:
+	python3 -m pip install pipenv
+	pipenv sync --system
 
 .PHONY: selenium
 selenium:
@@ -18,5 +20,5 @@ selenium:
 
 .PHONY: pre-commit
 pre-commit:
-	$(PYTHON) -m pip install -r requirements-dev.txt
+	PIPENV_VENV_IN_PROJECT=1 pipenv sync --dev
 	.venv/bin/pre-commit run -a
