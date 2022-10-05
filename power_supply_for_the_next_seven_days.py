@@ -32,7 +32,7 @@ try:
     datetime_repr = (
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text
     )  # '111/09/17'
-    logger.info(f"{datetime_repr=}")
+    logger.info("datetime_repr=%s", datetime_repr)
     year, month, day = datetime_repr.split("/")
     datetime_ = datetime.datetime.strptime(f"{int(year)+1911}-{month}-{day}", "%Y-%m-%d")
     logger.info("Updated - %s", datetime_)
@@ -41,7 +41,7 @@ try:
 
     data_dir = pathlib.Path(__file__).parent / "data" / f"{datetime_:%Y%m%d}"
     data_dir.mkdir(parents=True, exist_ok=True)
-    with open(data_dir / "power_supply_for_the_next_seven_days.html", "w") as file:
+    with (data_dir / "power_supply_for_the_next_seven_days.html").open("w") as file:
         file.write(html)
 finally:
     driver.quit()
