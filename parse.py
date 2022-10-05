@@ -6,6 +6,7 @@ import os
 import pandas as pd
 from bs4 import BeautifulSoup
 
+# TODO: get html path from CLI
 with open("data/20220917/202209171750.html", encoding="utf-8") as html_doc:
     soup = BeautifulSoup(html_doc, "html.parser")
 
@@ -45,3 +46,4 @@ for tr in tr_list:
 
 columns = ["group_name"] + headers
 data = pd.DataFrame(data_list, columns=columns)
+data.to_csv("aaa.csv", index=False)  # TODO: save dataframe to CSV file.
