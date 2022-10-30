@@ -41,7 +41,6 @@ try:
 
     data_dir = pathlib.Path(__file__).parent / "data" / f"{datetime_:%Y%m%d}"
     data_dir.mkdir(parents=True, exist_ok=True)
-    with (data_dir / "power_supply_for_the_next_seven_days.html").open("w") as file:
-        file.write(html)
+    (data_dir / "power_supply_for_the_next_seven_days.html").write_text(html)
 finally:
     driver.quit()
