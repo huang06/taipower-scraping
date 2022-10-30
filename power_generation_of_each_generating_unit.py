@@ -39,7 +39,7 @@ try:
 
     html = driver.page_source
 
-    data_dir = pathlib.Path(__file__).parent / "data" / f"{datetime_:%Y%m%d}"
+    data_dir = pathlib.Path(__file__).resolve().parent / "data" / f"{datetime_:%Y%m%d}"
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / f"{datetime_:%Y%m%d%H%M}.html").write_text(html)
 finally:
