@@ -39,9 +39,8 @@ try:
 
     html = driver.page_source
 
-    data_dir = pathlib.Path(__file__).parent / "data" / f"{datetime_:%Y%m%d}"
+    data_dir = pathlib.Path(__file__).resolve().parent / "data" / f"{datetime_:%Y%m%d}"
     data_dir.mkdir(parents=True, exist_ok=True)
-    with (data_dir / f"{datetime_:%Y%m%d%H%M}.html").open("w") as file:
-        file.write(html)
+    (data_dir / f"{datetime_:%Y%m%d%H%M}.html").write_text(html)
 finally:
     driver.quit()
