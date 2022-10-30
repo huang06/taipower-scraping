@@ -25,12 +25,12 @@ repos:
       - id: python-use-type-annotations
       - id: python-no-log-warn
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.0.0
+    rev: v3.2.0
     hooks:
       - id: pyupgrade
         args: ["--py38-plus"]
   - repo: https://github.com/psf/black
-    rev: 22.8.0
+    rev: 22.10.0
     hooks:
       - id: black
   - repo: https://github.com/adrienverge/yamllint
@@ -62,7 +62,7 @@ repos:
           - types-pytz
           - types-redis
   - repo: https://github.com/nbQA-dev/nbQA
-    rev: 1.5.2
+    rev: 1.5.3
     hooks:
       - id: nbqa-black
       - id: nbqa-pyupgrade
