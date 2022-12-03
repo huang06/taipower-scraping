@@ -1,0 +1,713 @@
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="cache-control" content="max-age=0">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="expires" content="Tue, 01 Jan 1990 1:00:00 GMT">
+<meta http-equiv="pragma" content="no-cache">
+<title>未來一週電力資訊</title>
+<link rel="stylesheet" href="style/style.css" type="text/css">
+<link rel="stylesheet" href="style/menu.css" type="text/css">
+<!--<link rel="stylesheet" href="script/soChange/style.css" type="text/css">-->
+<!--<link rel="stylesheet" href="css/ldr.css" type="text/css">-->
+<link rel="stylesheet" href="css/ldrtab.css" type="text/css">
+<!--<script src="js/jquery-2.2.4.min.js"></script>-->
+<script async="" src="//www.google-analytics.com/analytics.js"></script><script src="js/jquery-360.min.js"></script>
+<script src="js/flash/swfobject.js" type="text/javascript"></script>
+<script src="js/amcharts.js" type="text/javascript"></script> 
+<script src="js/amfallback.js" type="text/javascript"></script>
+<script src="js/datafunc.js" type="text/javascript"></script>
+<!--–[if lt IE 7.]--> <script defer="" type="text/javascript" src="js/pngfix.js"></script> <!--[endif]–-->
+
+<style type="text/css">
+body {
+font-family: "Hiragino Kaku Gothic Pro","微軟正黑體","Microsoft Jhenghei",Helvetica,Arial,sans-serif;
+font-size:15px;
+line-height:1.2em;
+background:#FFF;
+text-align: center;
+}
+
+/*BoxTableInside*/
+table.BoxTableInside{ width:85% ;border:#8297d6 1px solid; padding:0; margin:0 auto 10px auto; border-collapse:collapse; }
+table.BoxTableInside tr{}
+table.BoxTableInside thead th{ font-weight:normal; background-color:#edf0f9; text-align:center; border-bottom:#8297d6 1px solid; border-left:#8297d6 1px solid;padding:5px; color:#237acc; font-weight:bold; font-size:13px;}
+table.BoxTableInside tbody th{ 
+ font-weight:normal; background-color:#edf0f9; text-align:center;
+ border-bottom:#8297d6 1px solid; border-left:#8297d6 1px solid;border-right:#8297d6 1px solid;border-top:#8297d6 1px solid; padding:5px 5px 5px 10px; color:#237acc; font-weight:bold;}
+table.BoxTableInside td{border-bottom:#8297d6 1px solid; border-left:#8297d6 1px solid;border-right:#8297d6 1px solid;border-top:#8297d6 1px solid; text-align:center;padding:5px 5px 5px 10px; font-family:Verdana, Arial, Helvetica, sans-serif;}
+table.BoxTableInside td a{ color:#2f83cb; text-decoration:none;}
+table.BoxTableInside td a:hover{ color:#2f83cb; text-decoration:underline;} 
+.remarks {
+	text-align: left;
+	line-height: 150%;
+	font-size: 14px;
+	letter-spacing: 1px;
+	color: #333333;
+	width: 95%;
+	margin: 0 auto;
+}
+.idremarks {
+	text-align: left;
+	line-height: 150%;
+	font-size: 1.05em;
+	letter-spacing: 1px;
+	color: #333333;
+	width: 88%;
+	margin-left: 2.0em;
+	margin-right: 2.0em;
+}
+.timedesc {
+	font-size: 85%;
+	line-height: 120%;
+	color: #069;
+}
+/* 清單樣式 */
+
+#new-info-item .tabs { margin:0px; padding:10px 0; overflow:auto; border-bottom: dashed 1px #eaeaea; }
+#new-info-item .tabs li { float:left; margin:5px; padding:0px; list-style:none; font-size:15px; line-height:18px; background:#ebebeb; }
+#new-info-item .tabs li a { display:block; padding:5px 15px; border:solid 1px #d9d9d9; color:#666; }
+#new-info-item .tabs li a:hover { background:#ccc; color:#333; }
+#new-info-item .tabs li.cur { background:#157db3; color:#fff; }
+#new-info-item .tabs li.cur a { color:#fff; }
+#new-info-item .tabs li.cur a:hover { background:#157db3; color:#fff; }
+
+
+
+</style>
+</head>
+<body topmargin="0" marginwidth="0" marginheight="0" leftmargin="0" bgcolor="#ffffff">
+<!--<div  id="new-info-item">
+<ul class="tabs">
+<li class="cur"><a href="../../content/new_info/new_info-c41.aspx?LinkID=21" target="_top" class="whitelink2" tabindex="4000">未來一週電力資訊</a></li>
+<li><a href="../../content/new_info/new_info-c41.aspx?LinkID=28" target="_top" class="whitelink2" tabindex="4000">未來二個月電力資訊</a></li>
+</ul>
+</div>-->
+<br>
+  
+<script>
+		var alertBands = [6,10];
+		function getWeekday(sDate){
+		var dt = new Date(sDate.replace(/-/g, '/'));
+		var a = ['星期日', '星期一','星期二','星期三','星期四','星期五','星期六'];     return a[dt.getDay()]; 
+		}
+        
+		$.get("data/reserve_forecast.txt", function(data) {
+        line = data;
+        array = line.split('\n');
+		
+		//day1
+		//日期
+		getmsg_reserve_date1=array[0];
+		getmsg_reserve_date1=getmsg_reserve_date1.split(',')[0];
+		getmsg_reserve_date1=getmsg_reserve_date1.substr(5,5)+"<br>("+getWeekday(getmsg_reserve_date1)+")";
+    
+		
+		//預估淨尖峰供電能力(萬瓩)
+    getmsg_reserve_supply1=array[0];
+		getmsg_reserve_supply1=(getmsg_reserve_supply1.split(',')[1]);
+		//預估尖峰負載(萬瓩)
+		getmsg_reserve_load1=array[0];
+		getmsg_reserve_load1=(getmsg_reserve_load1.split(',')[2]);
+		//預估尖峰備轉容量(萬瓩)
+    getmsg_value_reserve1=array[0];
+		getmsg_value_reserve1=(getmsg_value_reserve1.split(',')[4]);
+		//預估尖峰備轉容量率
+    getmsg_reserve1=array[0];
+		getmsg_reserve1=(getmsg_reserve1.split(',')[3]);
+		
+    $("#date1").html(getmsg_reserve_date1);
+		$("#supply1").html(getmsg_reserve_supply1);
+		$("#load1").html(getmsg_reserve_load1);
+		$("#value1").html(getmsg_value_reserve1);
+    if(getmsg_reserve1 >=10.00 )
+		{
+		$("#percent1").html('<td width="200" valign="middle" style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve1+'%'+'</td>');
+		$("#reserve1").html('<img width="60px" height="60px" src="images/01-green.png" title=備轉容量率:'+getmsg_reserve1+'%>');
+		$("#info1").text("供電充裕，系統供電餘裕充足。");
+		}
+		if((getmsg_reserve1 >6.00) && (getmsg_reserve1 <10.00))
+		{
+		$("#percent1").html('<td width="200" valign="middle" style="background-color:yellow;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve1+'%'+'</td>');
+		$("#reserve1").html('<img width="60px" height="60px" src="images/02-yellow.png" title=備轉容量率:'+getmsg_reserve1+'%>');
+		$("#info1").text("供電吃緊，系統供電餘裕緊澀。");
+		}
+		if(getmsg_reserve1 <=6.00 )
+		{
+		 if(getmsg_value_reserve1 > 90.000)
+		  {
+		  $("#percent1").html('<td width="200" valign="middle" style="background-color:orange;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve1+'%'+'</td>');
+		  $("#reserve1").html('<img width="60px" height="60px" src="images/03-orange.png" title=備轉容量率:'+getmsg_reserve1+'%>');
+		  $("#info1").text("供電警戒，系統限電機率增加。");
+		  }
+		 if((getmsg_value_reserve1 <= 90.000) && (getmsg_value_reserve1 > 50.000))
+		  {
+		  $("#percent1").html('<td width="200" valign="middle" style="background-color:red;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve1+'%'+'</td>');
+		  $("#reserve1").html('<img width="60px" height="60px" src="images/04-red.png" title=備轉容量:'+getmsg_value_reserve1+'萬瓩>');
+		  $("#info1").text("進入限電警戒期，若有大型機組發生非預期故障，進入限電作業。");
+		  }
+		 if(getmsg_value_reserve1 <= 50.000)
+		  {
+		  $("#percent1").html('<td width="200" valign="middle" style="background-color:black;padding-left: 5px; padding-right: 5px;"><font color=white>'+getmsg_reserve1+'%'+'</font></td>');
+		  $("#reserve1").html('<img width="60px" height="60px" src="images/05-black.png" title=備轉容量:'+getmsg_value_reserve1+'萬瓩>');
+		  $("#info1").text("進入限電準備期，若有中小型機組發生非預期故障，進入限電作業。");
+		  } 
+		}
+		if((getmsg_value_reserve1 == 0))
+		{
+		$("#supply1").text('暫無資料');
+		$("#load1").text('暫無資料');
+		$("#value1").text('暫無資料');
+    $("#percent1").text('暫無資料');
+		$("#reserve1").text('暫無資料');
+		$("#info1").text("暫無資料");
+		}		
+		
+		//day1 end
+		
+		//day2
+		//日期
+		getmsg_reserve_date2=array[1];
+		getmsg_reserve_date2=getmsg_reserve_date2.split(',')[0];
+		getmsg_reserve_date2=getmsg_reserve_date2.substr(5,5)+"<br>("+getWeekday(getmsg_reserve_date2)+")";
+    
+		
+		//預估淨尖峰供電能力(萬瓩)
+    getmsg_reserve_supply2=array[1];
+		getmsg_reserve_supply2=(getmsg_reserve_supply2.split(',')[1]);
+		//預估尖峰負載(萬瓩)
+		getmsg_reserve_load2=array[1];
+		getmsg_reserve_load2=(getmsg_reserve_load2.split(',')[2]);
+		//預估尖峰備轉容量(萬瓩)
+    getmsg_value_reserve2=array[1];
+		getmsg_value_reserve2=(getmsg_value_reserve2.split(',')[4]);
+		//預估尖峰備轉容量率
+    getmsg_reserve2=array[1];
+		getmsg_reserve2=(getmsg_reserve2.split(',')[3]);
+		
+    $("#date2").html(getmsg_reserve_date2);
+		$("#supply2").html(getmsg_reserve_supply2);
+		$("#load2").html(getmsg_reserve_load2);
+		$("#value2").html(getmsg_value_reserve2);
+    if(getmsg_reserve2 >=10.00 )
+		{
+		$("#percent2").html('<td width="200" valign="middle" style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve2+'%'+'</td>');
+		$("#reserve2").html('<img width="60px" height="60px" src="images/01-green.png" title=備轉容量率:'+getmsg_reserve2+'%>');
+		$("#info2").text("供電充裕，系統供電餘裕充足。");
+		}
+		if((getmsg_reserve2 >6.00) && (getmsg_reserve2 <10.00))
+		{
+		$("#percent2").html('<td width="200" valign="middle" style="background-color:yellow;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve2+'%'+'</td>');
+		$("#reserve2").html('<img width="60px" height="60px" src="images/02-yellow.png" title=備轉容量率:'+getmsg_reserve2+'%>');
+		$("#info2").text("供電吃緊，系統供電餘裕緊澀。");
+		}
+		if(getmsg_reserve2 <=6.00 )
+		{
+		 if(getmsg_value_reserve2 > 90.000)
+		  {
+		  $("#percent2").html('<td width="200" valign="middle" style="background-color:orange;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve2+'%'+'</td>');
+		  $("#reserve2").html('<img width="60px" height="60px" src="images/03-orange.png" title=備轉容量率:'+getmsg_reserve2+'%>');
+		  $("#info2").text("供電警戒，系統限電機率增加。");
+		  }
+		 if((getmsg_value_reserve2 <= 90.000) && (getmsg_value_reserve2 > 50.000))
+		  {
+		  $("#percent2").html('<td width="200" valign="middle" style="background-color:red;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve2+'%'+'</td>');
+		  $("#reserve2").html('<img width="60px" height="60px" src="images/04-red.png" title=備轉容量:'+getmsg_value_reserve2+'萬瓩>');
+		  $("#info2").text("進入限電警戒期，若有大型機組發生非預期故障，進入限電作業。");
+		  }
+		 if(getmsg_value_reserve2 <= 50.000)
+		  {
+		  $("#percent2").html('<td width="200" valign="middle" style="background-color:black;padding-left: 5px; padding-right: 5px;"><font color=white>'+getmsg_reserve2+'%'+'</font></td>');
+		  $("#reserve2").html('<img width="60px" height="60px" src="images/05-black.png" title=備轉容量:'+getmsg_value_reserve2+'萬瓩>');
+		  $("#info2").text("進入限電準備期，若有中小型機組發生非預期故障，進入限電作業。");
+		  } 
+		}
+		if((getmsg_value_reserve2 == 0))
+		{
+		$("#supply2").text('暫無資料');
+		$("#load2").text('暫無資料');
+		$("#value2").text('暫無資料');
+		$("#percent2").text('暫無資料');
+		$("#reserve2").text('暫無資料');
+		$("#info2").text("暫無資料");
+		}		
+		
+		//day2 end
+		
+		//day3
+		//日期
+		getmsg_reserve_date3=array[2];
+		getmsg_reserve_date3=getmsg_reserve_date3.split(',')[0];
+		getmsg_reserve_date3=getmsg_reserve_date3.substr(5,5)+"<br>("+getWeekday(getmsg_reserve_date3)+")";
+    
+		
+		//預估淨尖峰供電能力(萬瓩)
+    getmsg_reserve_supply3=array[2];
+		getmsg_reserve_supply3=(getmsg_reserve_supply3.split(',')[1]);
+		//預估尖峰負載(萬瓩)
+		getmsg_reserve_load3=array[2];
+		getmsg_reserve_load3=(getmsg_reserve_load3.split(',')[2]);
+		//預估尖峰備轉容量(萬瓩)
+    getmsg_value_reserve3=array[2];
+		getmsg_value_reserve3=(getmsg_value_reserve3.split(',')[4]);
+		//預估尖峰備轉容量率
+    getmsg_reserve3=array[2];
+		getmsg_reserve3=(getmsg_reserve3.split(',')[3]);
+		
+    $("#date3").html(getmsg_reserve_date3);
+		$("#supply3").html(getmsg_reserve_supply3);
+		$("#load3").html(getmsg_reserve_load3);
+		$("#value3").html(getmsg_value_reserve3);
+    if(getmsg_reserve3 >=10.00 )
+		{
+		$("#percent3").html('<td width="200" valign="middle" style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve3+'%'+'</td>');
+		$("#reserve3").html('<img width="60px" height="60px" src="images/01-green.png" title=備轉容量率:'+getmsg_reserve3+'%>');
+		$("#info3").text("供電充裕，系統供電餘裕充足。");
+		}
+		if((getmsg_reserve3 >6.00) && (getmsg_reserve3 <10.00))
+		{
+		$("#percent3").html('<td width="200" valign="middle" style="background-color:yellow;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve3+'%'+'</td>');
+		$("#reserve3").html('<img width="60px" height="60px" src="images/02-yellow.png" title=備轉容量率:'+getmsg_reserve3+'%>');
+		$("#info3").text("供電吃緊，系統供電餘裕緊澀。");
+		}
+		if(getmsg_reserve3 <=6.00 )
+		{
+		 if(getmsg_value_reserve3 > 90.000)
+		  {
+		  $("#percent3").html('<td width="200" valign="middle" style="background-color:orange;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve3+'%'+'</td>');
+		  $("#reserve3").html('<img width="60px" height="60px" src="images/03-orange.png" title=備轉容量率:'+getmsg_reserve3+'%>');
+		  $("#info3").text("供電警戒，系統限電機率增加。");
+		  }
+		 if((getmsg_value_reserve3 <= 90.000) && (getmsg_value_reserve3 > 50.000))
+		  {
+		  $("#percent3").html('<td width="200" valign="middle" style="background-color:red;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve3+'%'+'</td>');
+		  $("#reserve3").html('<img width="60px" height="60px" src="images/04-red.png" title=備轉容量:'+getmsg_value_reserve3+'萬瓩>');
+		  $("#info3").text("進入限電警戒期，若有大型機組發生非預期故障，進入限電作業。");
+		  }
+		 if(getmsg_value_reserve3 <= 50.000)
+		  {
+		  $("#percent3").html('<td width="200" valign="middle" style="background-color:black;padding-left: 5px; padding-right: 5px;"><font color=white>'+getmsg_reserve3+'%'+'</font></td>');
+		  $("#reserve3").html('<img width="60px" height="60px" src="images/05-black.png" title=備轉容量:'+getmsg_value_reserve3+'萬瓩>');
+		  $("#info3").text("進入限電準備期，若有中小型機組發生非預期故障，進入限電作業。");
+		  } 
+		}
+		if((getmsg_value_reserve3 == 0))
+		{
+		$("#supply3").text('暫無資料');
+		$("#load3").text('暫無資料');
+		$("#value3").text('暫無資料');
+		$("#percent3").text('暫無資料');
+		$("#reserve3").text('暫無資料');
+		$("#info3").text("暫無資料");
+		}		
+		
+		//day3 end
+		
+		//day4
+		//日期
+		getmsg_reserve_date4=array[3];
+		getmsg_reserve_date4=getmsg_reserve_date4.split(',')[0];
+		getmsg_reserve_date4=getmsg_reserve_date4.substr(5,5)+"<br>("+getWeekday(getmsg_reserve_date4)+")";
+    
+		
+		//預估淨尖峰供電能力(萬瓩)
+    getmsg_reserve_supply4=array[3];
+		getmsg_reserve_supply4=(getmsg_reserve_supply4.split(',')[1]);
+		//預估尖峰負載(萬瓩)
+		getmsg_reserve_load4=array[3];
+		getmsg_reserve_load4=(getmsg_reserve_load4.split(',')[2]);
+		//預估尖峰備轉容量(萬瓩)
+    getmsg_value_reserve4=array[3];
+		getmsg_value_reserve4=(getmsg_value_reserve4.split(',')[4]);
+		//預估尖峰備轉容量率
+    getmsg_reserve4=array[3];
+		getmsg_reserve4=(getmsg_reserve4.split(',')[3]);
+		
+    $("#date4").html(getmsg_reserve_date4);
+		$("#supply4").html(getmsg_reserve_supply4);
+		$("#load4").html(getmsg_reserve_load4);
+		$("#value4").html(getmsg_value_reserve4);
+    if(getmsg_reserve4 >=10.00 )
+		{
+		$("#percent4").html('<td width="200" valign="middle" style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve4+'%'+'</td>');
+		$("#reserve4").html('<img width="60px" height="60px" src="images/01-green.png" title=備轉容量率:'+getmsg_reserve4+'%>');
+		$("#info4").text("供電充裕，系統供電餘裕充足。");
+		}
+		if((getmsg_reserve4 >6.00) && (getmsg_reserve4 <10.00))
+		{
+		$("#percent4").html('<td width="200" valign="middle" style="background-color:yellow;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve4+'%'+'</td>');
+		$("#reserve4").html('<img width="60px" height="60px" src="images/02-yellow.png" title=備轉容量率:'+getmsg_reserve4+'%>');
+		$("#info4").text("供電吃緊，系統供電餘裕緊澀。");
+		}
+		if(getmsg_reserve4 <=6.00 )
+		{
+		 if(getmsg_value_reserve4 > 90.000)
+		  {
+		  $("#percent4").html('<td width="200" valign="middle" style="background-color:orange;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve4+'%'+'</td>');
+		  $("#reserve4").html('<img width="60px" height="60px" src="images/03-orange.png" title=備轉容量率:'+getmsg_reserve4+'%>');
+		  $("#info4").text("供電警戒，系統限電機率增加。");
+		  }
+		 if((getmsg_value_reserve4 <= 90.000) && (getmsg_value_reserve4 > 50.000))
+		  {
+		  $("#percent4").html('<td width="200" valign="middle" style="background-color:red;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve4+'%'+'</td>');
+		  $("#reserve4").html('<img width="60px" height="60px" src="images/04-red.png" title=備轉容量:'+getmsg_value_reserve4+'萬瓩>');
+		  $("#info4").text("進入限電警戒期，若有大型機組發生非預期故障，進入限電作業。");
+		  }
+		 if(getmsg_value_reserve4 <= 50.000)
+		  {
+		  $("#percent4").html('<td width="200" valign="middle" style="background-color:black;padding-left: 5px; padding-right: 5px;"><font color=white>'+getmsg_reserve4+'%'+'</font></td>');
+		  $("#reserve4").html('<img width="60px" height="60px" src="images/05-black.png" title=備轉容量:'+getmsg_value_reserve4+'萬瓩>');
+		  $("#info4").text("進入限電準備期，若有中小型機組發生非預期故障，進入限電作業。");
+		  } 
+		}
+		if((getmsg_value_reserve4 == 0))
+		{
+		$("#supply4").text('暫無資料');
+		$("#load4").text('暫無資料');
+		$("#value4").text('暫無資料');
+		$("#percent4").text('暫無資料');
+		$("#reserve4").text('暫無資料');
+		$("#info4").text("暫無資料");
+		}		
+		
+		//day4 end
+		
+		//day5
+		//日期
+		getmsg_reserve_date5=array[4];
+		getmsg_reserve_date5=getmsg_reserve_date5.split(',')[0];
+		getmsg_reserve_date5=getmsg_reserve_date5.substr(5,5)+"<br>("+getWeekday(getmsg_reserve_date5)+")";
+    
+		
+		//預估淨尖峰供電能力(萬瓩)
+    getmsg_reserve_supply5=array[4];
+		getmsg_reserve_supply5=(getmsg_reserve_supply5.split(',')[1]);
+		//預估尖峰負載(萬瓩)
+		getmsg_reserve_load5=array[4];
+		getmsg_reserve_load5=(getmsg_reserve_load5.split(',')[2]);
+		//預估尖峰備轉容量(萬瓩)
+    getmsg_value_reserve5=array[4];
+		getmsg_value_reserve5=(getmsg_value_reserve5.split(',')[4]);
+		//預估尖峰備轉容量率
+    getmsg_reserve5=array[4];
+		getmsg_reserve5=(getmsg_reserve5.split(',')[3]);
+		
+    $("#date5").html(getmsg_reserve_date5);
+		$("#supply5").html(getmsg_reserve_supply5);
+		$("#load5").html(getmsg_reserve_load5);
+		$("#value5").html(getmsg_value_reserve5);
+    if(getmsg_reserve5 >=10.00 )
+		{
+		$("#percent5").html('<td width="200" valign="middle" style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve5+'%'+'</td>');
+		$("#reserve5").html('<img width="60px" height="60px" src="images/01-green.png" title=備轉容量率:'+getmsg_reserve5+'%>');
+		$("#info5").text("供電充裕，系統供電餘裕充足。");
+		}
+		if((getmsg_reserve5 >6.00) && (getmsg_reserve5 <10.00))
+		{
+		$("#percent5").html('<td width="200" valign="middle" style="background-color:yellow;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve5+'%'+'</td>');
+		$("#reserve5").html('<img width="60px" height="60px" src="images/02-yellow.png" title=備轉容量率:'+getmsg_reserve5+'%>');
+		$("#info5").text("供電吃緊，系統供電餘裕緊澀。");
+		}
+		if(getmsg_reserve5 <=6.00 )
+		{
+		 if(getmsg_value_reserve5 > 90.000)
+		  {
+		  $("#percent5").html('<td width="200" valign="middle" style="background-color:orange;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve5+'%'+'</td>');
+		  $("#reserve5").html('<img width="60px" height="60px" src="images/03-orange.png" title=備轉容量率:'+getmsg_reserve5+'%>');
+		  $("#info5").text("供電警戒，系統限電機率增加。");
+		  }
+		 if((getmsg_value_reserve5 <= 90.000) && (getmsg_value_reserve5 > 50.000))
+		  {
+		  $("#percent5").html('<td width="200" valign="middle" style="background-color:red;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve5+'%'+'</td>');
+		  $("#reserve5").html('<img width="60px" height="60px" src="images/04-red.png" title=備轉容量:'+getmsg_value_reserve5+'萬瓩>');
+		  $("#info5").text("進入限電警戒期，若有大型機組發生非預期故障，進入限電作業。");
+		  }
+		 if(getmsg_value_reserve5 <= 50.000)
+		  {
+		  $("#percent5").html('<td width="200" valign="middle" style="background-color:black;padding-left: 5px; padding-right: 5px;"><font color=white>'+getmsg_reserve5+'%'+'</font></td>');
+		  $("#reserve5").html('<img width="60px" height="60px" src="images/05-black.png" title=備轉容量:'+getmsg_value_reserve5+'萬瓩>');
+		  $("#info5").text("進入限電準備期，若有中小型機組發生非預期故障，進入限電作業。");
+		  } 
+		}
+		if((getmsg_value_reserve5 == 0))
+		{
+		$("#supply5").text('暫無資料');
+		$("#load5").text('暫無資料');
+		$("#value5").text('暫無資料');
+		$("#percent5").text('暫無資料');
+		$("#reserve5").text('暫無資料');
+		$("#info5").text("暫無資料");
+		}		
+		
+		//day5 end
+		
+		//day6
+		//日期
+		getmsg_reserve_date6=array[5];
+		getmsg_reserve_date6=getmsg_reserve_date6.split(',')[0];
+		getmsg_reserve_date6=getmsg_reserve_date6.substr(5,5)+"<br>("+getWeekday(getmsg_reserve_date6)+")";
+    
+		
+		//預估淨尖峰供電能力(萬瓩)
+    getmsg_reserve_supply6=array[5];
+		getmsg_reserve_supply6=(getmsg_reserve_supply6.split(',')[1]);
+		//預估尖峰負載(萬瓩)
+		getmsg_reserve_load6=array[5];
+		getmsg_reserve_load6=(getmsg_reserve_load6.split(',')[2]);
+		//預估尖峰備轉容量(萬瓩)
+    getmsg_value_reserve6=array[5];
+		getmsg_value_reserve6=(getmsg_value_reserve6.split(',')[4]);
+		//預估尖峰備轉容量率
+    getmsg_reserve6=array[5];
+		getmsg_reserve6=(getmsg_reserve6.split(',')[3]);
+		
+    $("#date6").html(getmsg_reserve_date6);
+		$("#supply6").html(getmsg_reserve_supply6);
+		$("#load6").html(getmsg_reserve_load6);
+		$("#value6").html(getmsg_value_reserve6);
+    if(getmsg_reserve6 >=10.00 )
+		{
+		$("#percent6").html('<td width="200" valign="middle" style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve6+'%'+'</td>');
+		$("#reserve6").html('<img width="60px" height="60px" src="images/01-green.png" title=備轉容量率:'+getmsg_reserve6+'%>');
+		$("#info6").text("供電充裕，系統供電餘裕充足。");
+		}
+		if((getmsg_reserve6 >6.00) && (getmsg_reserve6 <10.00))
+		{
+		$("#percent6").html('<td width="200" valign="middle" style="background-color:yellow;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve6+'%'+'</td>');
+		$("#reserve6").html('<img width="60px" height="60px" src="images/02-yellow.png" title=備轉容量率:'+getmsg_reserve6+'%>');
+		$("#info6").text("供電吃緊，系統供電餘裕緊澀。");
+		}
+		if(getmsg_reserve6 <=6.00 )
+		{
+		 if(getmsg_value_reserve6 > 90.000)
+		  {
+		  $("#percent6").html('<td width="200" valign="middle" style="background-color:orange;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve6+'%'+'</td>');
+		  $("#reserve6").html('<img width="60px" height="60px" src="images/03-orange.png" title=備轉容量率:'+getmsg_reserve6+'%>');
+		  $("#info6").text("供電警戒，系統限電機率增加。");
+		  }
+		 if((getmsg_value_reserve6 <= 90.000) && (getmsg_value_reserve6 > 50.000))
+		  {
+		  $("#percent6").html('<td width="200" valign="middle" style="background-color:red;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve6+'%'+'</td>');
+		  $("#reserve6").html('<img width="60px" height="60px" src="images/04-red.png" title=備轉容量:'+getmsg_value_reserve6+'萬瓩>');
+		  $("#info6").text("進入限電警戒期，若有大型機組發生非預期故障，進入限電作業。");
+		  }
+		 if(getmsg_value_reserve6 <= 50.000)
+		  {
+		  $("#percent6").html('<td width="200" valign="middle" style="background-color:black;padding-left: 5px; padding-right: 5px;"><font color=white>'+getmsg_reserve6+'%'+'</font></td>');
+		  $("#reserve6").html('<img width="60px" height="60px" src="images/05-black.png" title=備轉容量:'+getmsg_value_reserve6+'萬瓩>');
+		  $("#info6").text("進入限電準備期，若有中小型機組發生非預期故障，進入限電作業。");
+		  } 
+		}
+		if((getmsg_value_reserve6 == 0))
+		{
+		$("#supply6").text('暫無資料');
+		$("#load6").text('暫無資料');
+		$("#value6").text('暫無資料');
+		$("#percent6").text('暫無資料');
+		$("#reserve6").text('暫無資料');
+		$("#info6").text("暫無資料");
+		}		
+		
+		//day6 end
+		
+		//day7
+		//日期
+		getmsg_reserve_date7=array[6];
+		getmsg_reserve_date7=getmsg_reserve_date7.split(',')[0];
+		getmsg_reserve_date7=getmsg_reserve_date7.substr(5,5)+"<br>("+getWeekday(getmsg_reserve_date7)+")";
+    
+		
+		//預估淨尖峰供電能力(萬瓩)
+    getmsg_reserve_supply7=array[6];
+		getmsg_reserve_supply7=(getmsg_reserve_supply7.split(',')[1]);
+		//預估尖峰負載(萬瓩)
+		getmsg_reserve_load7=array[6];
+		getmsg_reserve_load7=(getmsg_reserve_load7.split(',')[2]);
+		//預估尖峰備轉容量(萬瓩)
+    getmsg_value_reserve7=array[6];
+		getmsg_value_reserve7=(getmsg_value_reserve7.split(',')[4]);
+		//預估尖峰備轉容量率
+    getmsg_reserve7=array[6];
+		getmsg_reserve7=(getmsg_reserve7.split(',')[3]);
+		
+    $("#date7").html(getmsg_reserve_date7);
+		$("#supply7").html(getmsg_reserve_supply7);
+		$("#load7").html(getmsg_reserve_load7);
+		$("#value7").html(getmsg_value_reserve7);
+    if(getmsg_reserve7 >=10.00 )
+		{
+		$("#percent7").html('<td width="200" valign="middle" style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve7+'%'+'</td>');
+		$("#reserve7").html('<img width="60px" height="60px" src="images/01-green.png" title=備轉容量率:'+getmsg_reserve7+'%>');
+		$("#info7").text("供電充裕，系統供電餘裕充足。");
+		}
+		if((getmsg_reserve7 >6.00) && (getmsg_reserve7 <10.00))
+		{
+		$("#percent7").html('<td width="200" valign="middle" style="background-color:yellow;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve7+'%'+'</td>');
+		$("#reserve7").html('<img width="60px" height="60px" src="images/02-yellow.png" title=備轉容量率:'+getmsg_reserve7+'%>');
+		$("#info7").text("供電吃緊，系統供電餘裕緊澀。");
+		}
+		if(getmsg_reserve7 <=6.00 )
+		{
+		 if(getmsg_value_reserve7 > 90.000)
+		  {
+		  $("#percent7").html('<td width="200" valign="middle" style="background-color:orange;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve7+'%'+'</td>');
+		  $("#reserve7").html('<img width="60px" height="60px" src="images/03-orange.png" title=備轉容量率:'+getmsg_reserve7+'%>');
+		  $("#info7").text("供電警戒，系統限電機率增加。");
+		  }
+		 if((getmsg_value_reserve7 <= 90.000) && (getmsg_value_reserve7 > 50.000))
+		  {
+		  $("#percent7").html('<td width="200" valign="middle" style="background-color:red;padding-left: 5px; padding-right: 5px;">'+getmsg_reserve7+'%'+'</td>');
+		  $("#reserve7").html('<img width="60px" height="60px" src="images/04-red.png" title=備轉容量:'+getmsg_value_reserve7+'萬瓩>');
+		  $("#info7").text("進入限電警戒期，若有大型機組發生非預期故障，進入限電作業。");
+		  }
+		 if(getmsg_value_reserve7 <= 50.000)
+		  {
+		  $("#percent7").html('<td width="200" valign="middle" style="background-color:black;padding-left: 5px; padding-right: 5px;"><font color=white>'+getmsg_reserve7+'%'+'</font></td>');
+		  $("#reserve7").html('<img width="60px" height="60px" src="images/05-black.png" title=備轉容量:'+getmsg_value_reserve7+'萬瓩>');
+		  $("#info7").text("進入限電準備期，若有中小型機組發生非預期故障，進入限電作業。");
+		  } 
+		}
+		if((getmsg_value_reserve7 == 0))
+		{
+		$("#supply7").text('暫無資料');
+		$("#load7").text('暫無資料');
+		$("#value7").text('暫無資料');
+		$("#percent7").text('暫無資料');
+		$("#reserve7").text('暫無資料');
+		$("#info7").text("暫無資料");
+		}		
+		
+		//day7 end
+	
+		//發布時間
+		getmsg_date=array[9];
+		getmsg_date=getmsg_date.replace('<E--','');
+		getmsg_date=getmsg_date.replace('-->','');
+		getmsg_date=getmsg_date.replace('-','/');
+		getmsg_date=getmsg_date.replace('-','/');
+		//getmsg_date=getmsg_date.substring(0, 10)+" 17:00";
+		getmsg_date=getmsg_date.substring(0, 10)+" ";
+        
+		$("#datetime").text(' '+getmsg_date+' ');
+		//$("#datetime").text(' (更新日期：每日下午5時) ');
+        })   
+        </script>
+    
+        
+		<h2>
+		<br>
+    <strong><span class="blue">未來一週電力供需預測</span></strong><span class="blue" style="font-size: 12pt; font-weight:bold;">&nbsp;&nbsp;(更新日期：<span id="datetime"> 111/12/03   </span>)</span><br>
+    <!--<strong><span class="blue">發布時間:<span id="datetime" class="blue"></span></span></strong><br>-->
+    </h2>	    
+	
+	<div class="idremarks">
+		<ul style="list-style-type: none;">
+			<!--<span style="margin-left: -1.5em;"></span>-->
+			<!--<li>系統公告：大林新</li>-->
+		</ul>
+	</div>
+		<!--<span class="timedesc">最近更新時間:<span id="datetime"></span></span><br>-->
+    
+	<center> 
+		<table class="bulletining" width="100%" cellspacing="0" cellpadding="5" border="0">
+		  <tbody><tr>
+			<td></td>
+			<th scope="col" width="90" valign="middle" align="center"><span id="date1">12/04<br>(星期日)</span></th>
+			<th scope="col" width="90" valign="middle" align="center"><span id="date2">12/05<br>(星期一)</span></th>
+			<th scope="col" width="90" valign="middle" align="center"><span id="date3">12/06<br>(星期二)</span></th>
+			<th scope="col" width="90" valign="middle" align="center"><span id="date4">12/07<br>(星期三)</span></th>
+			<th scope="col" width="90" valign="middle" align="center"><span id="date5">12/08<br>(星期四)</span></th>
+			<th scope="col" width="90" valign="middle" align="center"><span id="date6">12/09<br>(星期五)</span></th>
+			<th scope="col" width="90" valign="middle" align="center"><span id="date7">12/10<br>(星期六)</span></th>
+		  </tr>
+		  <tr>
+			<th scope="row" style="padding-left: 2px; padding-right: 2px;" width="90" nowrap=""><span class="blue">淨尖峰供電能力<span style="font-size: 0.8em;">(萬瓩)</span></span></th>
+			<td width="90" valign="middle"><span id="supply1">3037</span></td>
+			<td width="90" valign="middle"><span id="supply2">3340</span></td>
+			<td width="90" valign="middle"><span id="supply3">3315</span></td>
+			<td width="90" valign="middle"><span id="supply4">3352</span></td>
+			<td width="90" valign="middle"><span id="supply5">3383</span></td>
+			<td width="90" valign="middle"><span id="supply6">3422</span></td>
+			<td width="90" valign="middle"><span id="supply7">3144</span></td>
+		  </tr>
+		  <tr>
+			<th scope="row" style="padding-left: 2px; padding-right: 2px;" width="90" nowrap=""><span class="blue">尖峰負載<span style="font-size: 0.8em;">(萬瓩)</span></span></th>
+			<td width="90" valign="middle"><span id="load1">2630</span></td>
+			<td width="90" valign="middle"><span id="load2">3010</span></td>
+			<td width="90" valign="middle"><span id="load3">3000</span></td>
+			<td width="90" valign="middle"><span id="load4">3050</span></td>
+			<td width="90" valign="middle"><span id="load5">3050</span></td>
+			<td width="90" valign="middle"><span id="load6">3000</span></td>
+			<td width="90" valign="middle"><span id="load7">2690</span></td>
+		  </tr>
+		  <tr>
+			<th scope="row" style="padding-left: 2px; padding-right: 2px;" width="90" nowrap=""><span class="blue">備轉容量<span style="font-size: 0.8em;">(萬瓩)</span></span></th>
+			<td width="90" valign="middle"><span id="value1">407
+</span></td>
+			<td width="90" valign="middle"><span id="value2">330
+</span></td>
+			<td width="90" valign="middle"><span id="value3">315
+</span></td>
+			<td width="90" valign="middle"><span id="value4">302
+</span></td>
+			<td width="90" valign="middle"><span id="value5">333
+</span></td>
+			<td width="90" valign="middle"><span id="value6">422
+</span></td>
+			<td width="90" valign="middle"><span id="value7">454
+</span></td>
+		  </tr>
+		  <tr>
+			<th scope="row" style="padding-left: 2px; padding-right: 2px;" width="90" nowrap=""><span class="blue">備轉容量率<span style="font-size: 0.8em;">(%)</span></span></th>
+			<td width="90" valign="middle"><span id="percent1"><td style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;" width="200" valign="middle">15.46%</td></span></td>
+			<td width="90" valign="middle"><span id="percent2"><td style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;" width="200" valign="middle">10.97%</td></span></td>
+			<td width="90" valign="middle"><span id="percent3"><td style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;" width="200" valign="middle">10.48%</td></span></td>
+			<td width="90" valign="middle"><span id="percent4"><td style="background-color:yellow;padding-left: 5px; padding-right: 5px;" width="200" valign="middle">9.91%</td></span></td>
+			<td width="90" valign="middle"><span id="percent5"><td style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;" width="200" valign="middle">10.92%</td></span></td>
+			<td width="90" valign="middle"><span id="percent6"><td style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;" width="200" valign="middle">14.07%</td></span></td>
+			<td width="90" valign="middle"><span id="percent7"><td style="background-color:#81F79F;padding-left: 5px; padding-right: 5px;" width="200" valign="middle">16.86%</td></span></td>
+		  </tr>
+		  <tr>
+			<th scope="row" style="padding-left: 2px; padding-right: 2px;" width="90" nowrap=""><span class="blue">備轉容量燈號</span></th>
+			<!--<td width="100" valign="middle"><img width="60px" height="60px" width="89px" height="95px" src="./images/Light-y.png" /></td>
+			<td width="100" valign="middle"><img width="60px" height="60px" width="89px" height="95px" src="./images/Light-y.png" /></td>
+			<td width="100" valign="middle"><img width="60px" height="60px" width="89px" height="95px" src="./images/Light-y.png" /></td>
+			<td width="100" valign="middle"><img width="60px" height="60px" width="89px" height="95px" src="./images/Light-y.png" /></td>
+			<td width="100" valign="middle"><img width="60px" height="60px" width="89px" height="95px" src="./images/Light-y.png" /></td>
+			<td width="100" valign="middle"><img width="60px" height="60px" width="89px" height="95px" src="./images/Light-y.png" /></td>
+			<td width="100" valign="middle"><img width="60px" height="60px" width="89px" height="95px" src="./images/Light-y.png" /></td>-->
+		  <td><span id="reserve1"><img src="images/01-green.png" title="備轉容量率:15.46%" width="60px" height="60px"></span></td>
+		  <td><span id="reserve2"><img src="images/01-green.png" title="備轉容量率:10.97%" width="60px" height="60px"></span></td>
+		  <td><span id="reserve3"><img src="images/01-green.png" title="備轉容量率:10.48%" width="60px" height="60px"></span></td>
+		  <td><span id="reserve4"><img src="images/02-yellow.png" title="備轉容量率:9.91%" width="60px" height="60px"></span></td>
+		  <td><span id="reserve5"><img src="images/01-green.png" title="備轉容量率:10.92%" width="60px" height="60px"></span></td>
+		  <td><span id="reserve6"><img src="images/01-green.png" title="備轉容量率:14.07%" width="60px" height="60px"></span></td>
+		  <td><span id="reserve7"><img src="images/01-green.png" title="備轉容量率:16.86%" width="60px" height="60px"></span></td>
+		</tr>
+		</tbody></table>	
+</center>
+<img src="images/icon_5_exp0.png" style="float:left" width="600px" height="45px">
+<br><br><br>
+<div class="remarks">
+<ol>備註：  
+  <li>未來一週電力供需預測，係參照中央氣象局每日11時所公布未來一週氣象預報資料，並依當時發電機組排程計劃進行評估作業。<br></li>
+  <li>更新時間：每日下午5 時。<br></li>
+  <!--<li>資料更新時間:每日下午5點。</li>-->
+</ol>
+</div>
+<script>
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-38594873-1', 'auto');
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview');
+
+</script>            
+
+
+</body></html>
