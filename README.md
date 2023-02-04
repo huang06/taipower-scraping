@@ -4,11 +4,14 @@ Scraping real-time power information from Taipower website.
 
 ## Motivation
 
-[Taipower](https://www.taipower.com.tw) updates Taiwan's electricity consumption information and power generation information every 10 minutes on its website. However, the official currently does not provide historical records for downloading.
+[Taipower](https://www.taipower.com.tw) updates electricity consumption and generation information every 10 minutes on its website. However, historical records are not available for download. To address this, I developed GitHub workflows that automatically collect the data at regular intervals and save it in this repository for future analytical purposes.
 
-Therefore, I set up GitHub actions to fetch the power data every 10 minutes and save to this repository for further analysis usage.
+## Schedule table
 
-[Taipower](https://www.taipower.com.tw) regularly updates electricity consumption and generation information every 10 minutes on its website. However, there is no option to download historical records. To address this,, I developed GitHub workflows that periodically gather the data and save it in this repository for future analysis purposes.
+| workflow | schedule |
+|---|---|
+| Power Supply for the Next Seven Days | `0 0,12 * * *` |
+| Power Generation of Each Generating Unit | `10 * * * *` |
 
 ## Development Guide
 
