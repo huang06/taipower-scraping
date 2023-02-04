@@ -8,6 +8,8 @@ Scraping real-time power information from Taipower website.
 
 Therefore, I set up GitHub actions to fetch the power data every 10 minutes and save to this repository for further analysis usage.
 
+[Taipower](https://www.taipower.com.tw) regularly updates electricity consumption and generation information every 10 minutes on its website. However, there is no option to download historical records. To address this,, I developed GitHub workflows that periodically gather the data and save it in this repository for future analysis purposes.
+
 ## Development Guide
 
 ### Prerequisites
@@ -32,7 +34,7 @@ python3 -m pip install pipenv
 pipenv sync --dev -v
 ```
 
-### Git
+### pre-commit
 
 ```bash
 pre-commit install
