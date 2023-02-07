@@ -1,14 +1,13 @@
 from __future__ import annotations
 
+import datetime
 import logging
 import os
+import re
+from pathlib import Path
 
 import pandas as pd
 from bs4 import BeautifulSoup
-
-# TODO: get html path from CLI
-with open("data/20220917/202209171750.html", encoding="utf-8") as html_doc:
-    soup = BeautifulSoup(html_doc, "html.parser")
 
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(
@@ -17,33 +16,77 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-table = soup.find("table", {"id": "unitgentab"})
 
-# parse headers
-thead = table.find("thead")
-headers = [thead.text.strip().lower() for thead in thead.find_all("th")]
-logger.info("headers: %s", headers)
-n_headers = len(headers)
+def extract_values_in_pagesource(html_path: Path) -> dict:
+    soup = BeautifulSoup(html_path.read_text(encoding="utf-8"), "html.parser")
 
-# parse rows
-data_list: list[list] = []
-tr_list = table.find("tbody").find_all("tr")
-for tr in tr_list:
-    # find group name
-    if set(tr["class"]) == {'dtrg-group', 'dtrg-start', 'dtrg-level-0'}:
-        group_name = tr.text
-        logger.info("group_name: %s", group_name)
-    # find rows of the group
-    cells = tr.find_all("td")
-    row = [index.text.strip() for index in cells]
+    datetime_ = datetime.datetime.strptime(
+        soup.find("a", id="datetime").text, "%Y-%m-%d %H:%M"
+    )  # 2023-02-07 21:20
 
-    if len(row) != n_headers:
-        logger.warning(row)
+    overview = soup.find_all("div", {"class": "col col-sm-6"})
+
+    nuclear = None
+    for div in overview:
+        obj = div.find("strong", string="核能(Nuclear)")
+        if obj is not None:
+            nuclear = float(obj.findNext("span").string.strip())
+            break
+    if obj is None:
+        logger.error("Failed to extract the Nuclear value")
+
+    coal = None
+    for div in overview:
+        obj = div.find("strong", string="燃煤(Coal)")
+        if obj is not None:
+            coal = float(obj.findNext("span").text.strip())
+            break
+    if obj is None:
+        logger.error("Failed to extract the Coal value")
+
+    solar = None
+    for div in overview:
+        obj = div.find("strong", string="太陽能(Solar)")
+        if obj is not None:
+            solar = float(obj.findNext("span").text.strip())
+            break
+    if obj is None:
+        logger.error("Failed to extract the Solar value")
+
+    wind = None
+    for div in overview:
+        obj = div.find("strong", string="風力(Wind)")
+        if obj is not None:
+            wind = float(obj.findNext("span").text.strip())
+            break
+    if obj is None:
+        logger.error("Failed to extract the Wind value")
+
+    output = {
+        "time": datetime_,
+        "overview": {
+            "nuclear": nuclear,
+            "coal": coal,
+            "solar": solar,
+            "wind": wind,
+        },
+    }
+    return output
+
+
+html_path_list = []
+for dir_ in Path("/home/tom/huang06/taipower-scraping/data").iterdir():
+    if not dir_.is_dir() or dir_.stem < '20230205':
         continue
+    for html_file in dir_.iterdir():
+        if re.match(r".*/(\d+).html$", str(html_file)):
+            html_path_list.append(html_file)
+html_path_list.sort()
+print(f"Length of html_path_list: {len(html_path_list)}")
 
-    row = [group_name] + row
-    data_list.append(row)
-
-columns = ["group_name"] + headers
-data = pd.DataFrame(data_list, columns=columns)
-data.to_csv("aaa.csv", index=False)  # TODO: save dataframe to CSV file.
+row_list = []
+for html_path in html_path_list:
+    resp = extract_values_in_pagesource(html_path)
+    row_list.append({"time": resp["time"], **resp["overview"]})
+df = pd.DataFrame(row_list)
+df.to_csv("aaa.csv", index=False)
