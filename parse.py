@@ -75,11 +75,12 @@ def extract_values_in_pagesource(html_path: Path) -> dict:
 
 
 html_path_list = []
-for dir_ in Path("/home/tom/huang06/taipower-scraping/data").iterdir():
+data_dir = Path(__file__).resolve().parent / "data"
+for dir_ in data_dir.iterdir():
     if not dir_.is_dir() or dir_.stem < '20230205':
         continue
     for html_file in dir_.iterdir():
-        if re.match(r".*/(\d+).html$", str(html_file)):
+        if re.match(r".*/(\d+)\.html$", str(html_file)):
             html_path_list.append(html_file)
 html_path_list.sort()
 print(f"Length of html_path_list: {len(html_path_list)}")
