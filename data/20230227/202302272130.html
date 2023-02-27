@@ -1,0 +1,451 @@
+<html lang="zh-tw"><head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="cache-control" content="max-age=0">
+	<meta http-equiv="cache-control" content="no-cache">
+	<meta http-equiv="expires" content="0">
+	<meta http-equiv="expires" content="Tue, 01 Jan 1990 1:00:00 GMT">
+	<meta http-equiv="pragma" content="no-cache">
+	<title>各機組發電量</title>
+	<link rel="stylesheet" href="style/style.css" type="text/css">
+    <link href="css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <style>
+    @import "css/ui-lightness/jquery-ui-1.9.1.custom.css";
+	@import "css/jquery.dataTables.1.10.21.min.css";
+	@import "css/rowGroup.dataTables.min.css";
+
+	body{
+	    min-width: 620px;
+	    max-width: 960px;
+	    margin: auto;
+		font-family: "Hiragino Kaku Gothic Pro","微軟正黑體","Microsoft Jhenghei",Helvetica,Arial,sans-serif;
+		font-size:15px;
+		line-height:1.2em;
+		background:#FFF;
+		text-align: left;
+	}
+	table.dataTable.stripe tbody tr.odd, table.dataTable.display tbody tr.odd {
+		background-color: #d5e3ed;
+	}
+	table.display thead th {
+	    padding: 3px 18px 3px 10px;
+	    border-bottom: 1px solid black;
+	    cursor: pointer;
+	    font-size: 18px;
+	    text-align: left;
+	}
+	table.dataTable.compact thead th, table.dataTable.compact thead td {
+       	background-color: #F6F6F6 ;
+	}
+	#unitgentab > tbody > tr.dtrg-group td {
+		background-color: #FFF;
+		border-bottom: 0.2rem #f50f0f solid;
+	}
+	#unitgentab {
+		   -ms-user-select: none;
+		   -moz-user-select: -moz-none;
+		   -khtml-user-select: none;
+		   -webkit-user-select: none;
+		   user-select: none;
+	}
+	.expanded-group{
+		background: url("images/minus.jpg") no-repeat scroll left center transparent;
+		padding-left: 15px !important
+	}
+	.collapsed-group{
+		background: url("images/plus.jpg") no-repeat scroll left center transparent;
+		padding-left: 15px !important
+	}
+	table .rm {
+		margin: 0;
+		padding: 0;
+		line-height: 150%;
+		font-size: 15px;
+		letter-spacing: 1px;
+	}
+	.remarkw{
+		font-size: 70%;
+		display: inline;
+	}
+	.remarks{
+		margin-left: 5em;
+		text-indent: -5em;
+	}
+	.remarksa{
+		margin-left: 1.2em;
+		text-indent: -1.2em;
+	}
+	#unitgentab > tbody > tr.odd > td:first-child, #unitgentab > tbody > tr.even > td:first-child {
+	    padding-left: 2rem;	    
+	}
+	#unitgentab > tbody > tr.dtrg-level-1 > td:first-child {
+		padding-left: 1rem;
+		border-bottom: none;
+		font-weight: bold;
+		background-color: #ffffe6;
+	}
+	.test-table-group {
+		font-size: 1.2rem;		
+	}
+/* 清單樣式 */
+
+#new-info-item .tabs { margin:0px; padding:10px 0; overflow:auto; border-bottom: dashed 1px #eaeaea; }
+#new-info-item .tabs li { float:left; margin:5px; padding:0px; list-style:none; font-size:15px; line-height:18px; background:#ebebeb; }
+#new-info-item .tabs li a { display:block; padding:5px 15px; border:solid 1px #d9d9d9; color:#666; }
+#new-info-item .tabs li a:hover { background:#ccc; color:#333; }
+#new-info-item .tabs li.cur { background:#157db3; color:#fff; }
+#new-info-item .tabs li.cur a { color:#fff; }
+#new-info-item .tabs li.cur a:hover { background:#157db3; color:#fff; }
+.pull-right { float: right; }
+.progress {margin-bottom: .5em;margin-top: .2em;}
+.alert { padding: .05rem 0.05rem; margin-bottom: 0rem;}
+.fright {float: right;}
+.barsdiv {width: 600px;}
+</style>
+
+</head>
+<body class="ex_highlight_row">
+<div id="message_bar"></div>
+
+<div class="container-fluid">
+
+<div class="ui-widget">
+	<div class="ui-state-highlight ui-corner-all" style="margin-top: 10px; padding-left: 1.0em;padding-top: .5em;">
+		<p align="left">
+		<strong>台電系統各機組發電量（單位 MW） <br>
+		更新時間 - <a id="datetime">2023-02-27 21:30</a></strong>
+	</p></div>
+</div>
+
+     <br>
+     <div class="row">
+      <div class="col col-sm-5">
+           	<div class="alert alert-light" role="alert">
+				  各能源別即時發電量小計(每10分鐘更新)：
+			</div>
+     </div>
+     <div class="col col-sm-4  offset-sm-3">
+           	<div class="alert alert-light fright" role="alert">
+				  總計： <span id="nestSumId" style="font-size: 1.6rem; text-align: justify; color: #666">24610</span><span class="small">&nbsp;&nbsp;MW</span>
+			</div>
+     </div>
+ 	</div>
+     <div class="row">
+      <div class="col col-sm-6">
+          <div class="span6">
+          <strong>核能(Nuclear)</strong><span id="item0" class="pull-right">2873.6 </span>
+          <div class="progress active bar-lb-0">
+              <div class="progress-bar bar-0" role="progressbar" aria-valuemin="0%" aria-valuemax="10%" style="width: 11.677%; background-color: rgb(204, 0, 153);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">11.677%</span></div>
+          <strong>燃煤(Coal)</strong><span id="item1" class="pull-right">4325.4 </span>
+          <div class="progress active bar-lb-1">
+              <div class="progress-bar bar-1" style="width: 17.576%; background-color: rgb(230, 92, 0);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">17.576%</span></div>
+          <strong>汽電共生(Co-Gen)</strong><span id="item2" class="pull-right">809.5 </span>
+          <div class="progress progress-striped active bar-lb-2">
+              <div class="progress-bar bar-2" style="width: 3.289%; background-color: rgb(230, 230, 0);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">3.289%</span></div>
+          <strong>民營電廠-燃煤(IPP-Coal)</strong><span id="item3" class="pull-right">2348.7 </span>
+          <div class="progress progress-success active bar-lb-3">
+              <div class="progress-bar bar-3" style="width: 9.544%; background-color: rgb(255, 163, 71);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">9.544%</span></div>
+          <strong>燃氣(LNG)</strong><span id="item4" class="pull-right">9032.3 </span>
+          <div class="progress progress-warning active bar-lb-4">
+              <div class="progress-bar bar-4" style="width: 36.702%; background-color: rgb(0, 102, 0);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">36.702%</span></div>
+          <strong>民營電廠-燃氣(IPP-LNG)</strong><span id="item5" class="pull-right">2506.0 </span>
+          <div class="progress progress-warning active bar-lb-5">
+              <div class="progress-bar bar-5" style="width: 10.183%; background-color: rgb(94, 223, 223);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">10.183%</span></div>
+		  <strong>燃油(Oil)</strong><span id="item6" class="pull-right">296.4 </span>
+          <div class="progress progress-danger active bar-lb-6">
+              <div class="progress-bar bar-6" style="width: 1.204%; background-color: rgb(255, 25, 25);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">1.204%</span></div>
+          <p>
+
+          </p>
+        </div>
+          </div>
+      <div class="col col-sm-6">
+          <div class="span6">
+          <strong>輕油(Diesel)</strong><span id="item7" class="pull-right">50.6 </span>
+          <div class="progress progress-info active bar-lb-7">
+              <div class="progress-bar bar-7" style="width: 0.206%; background-color: rgb(132, 132, 132);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">0.206%</span></div>
+          <strong>水力(Hydro)</strong><span id="item8" class="pull-right">512.5 </span>
+          <div class="progress progress-striped active bar-lb-8">
+              <div class="progress-bar bar-8" style="width: 2.082%; background-color: rgb(0, 0, 178);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">2.082%</span></div>
+          <strong>風力(Wind)</strong><span id="item9" class="pull-right">641.7 </span>
+          <div class="progress progress-success active bar-lb-9">
+              <div class="progress-bar bar-9" style="width: 2.608%; background-color: rgb(0, 153, 51);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">2.608%</span></div>
+          <strong>太陽能(Solar)</strong><span id="item10" class="pull-right">0.0 </span>
+          <div class="progress progress-warning active bar-lb-10">
+              <div class="progress-bar bar-10" style="width: 0%; background-color: rgb(0, 204, 0);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">0.000%</span></div>
+          <strong>抽蓄發電(Pumping Gen)</strong><span id="item11" class="pull-right">1206.8 </span>
+          <div class="progress progress-warning active bar-lb-11">
+              <div class="progress-bar bar-11" style="width: 4.904%; background-color: rgb(51, 102, 204);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">4.904%</span></div>
+		  <strong>其它再生能源(Other Renewable Energy)</strong><span id="item12" class="pull-right">6.6 </span>
+          <div class="progress progress-warning active bar-lb-12">
+              <div class="progress-bar bar-12" style="width: 0.027%; background-color: rgb(51, 102, 204);"></div>
+          <span style="color: #4d4d4d; margin: auto 0 auto 1em; ">0.027%</span></div>
+          <p>
+          </p>
+        </div>
+      </div>
+    </div>
+
+
+<br>
+<div class="row">
+	<div class="col-sm-12">
+<div id="unitgentab_wrapper" class="dataTables_wrapper no-footer"><div id="unitgentab_processing" class="dataTables_processing" style="display: none;">資料載入中...</div><table class="display row-border compact stripe dataTable no-footer" id="unitgentab" role="grid" border="0">
+	<thead>
+		<tr role="row"><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 15%;">機組名稱</th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 15%;">裝置容量<span class="remarkw">(註1)</span></th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 15%;">淨發電量<span class="remarkw">(註2)</span></th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 15%;">淨發電量/裝置容量比(%)<span class="remarkw">(註3)</span></th><th class="sorting_disabled" rowspan="1" colspan="1" style="width: 15%;">備註<span class="remarkw">(註11)</span></th></tr>
+	</thead>
+	<tbody>
+
+	<tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="nuclear"></a><b>核能(Nuclear)</b></td></tr><tr role="row" class="odd"><td>核二#2</td><td>985.0</td><td>982.6</td><td>99.756%</td><td> </td></tr><tr role="row" class="even"><td>核三#1</td><td>951.0</td><td>947.2</td><td>99.600%</td><td> </td></tr><tr role="row" class="odd"><td>核三#2</td><td>951.0</td><td>943.8</td><td>99.243%</td><td> </td></tr><tr role="row" class="even"><td>小計</td><td>2887.0(5.465%)</td><td>2873.6(11.677%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="coal"></a><b>燃煤(Coal)</b></td></tr><tr role="row" class="odd"><td>林口#1</td><td>800.0</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="even"><td>林口#2</td><td>800.0</td><td>762.5</td><td>95.312%</td><td> </td></tr><tr role="row" class="odd"><td>林口#3</td><td>800.0</td><td>762.6</td><td>95.325%</td><td> </td></tr><tr role="row" class="even"><td>台中#1</td><td>550.0</td><td>0.0</td><td>0.000%</td><td>環保停機</td></tr><tr role="row" class="odd"><td>台中#2</td><td>550.0</td><td>233.7</td><td>42.491%</td><td>環保限制</td></tr><tr role="row" class="even"><td>台中#3</td><td>550.0</td><td>0.0</td><td>0.000%</td><td>環保停機歲修</td></tr><tr role="row" class="odd"><td>台中#4</td><td>550.0</td><td>234.4</td><td>42.618%</td><td>環保限制</td></tr><tr role="row" class="even"><td>台中#5</td><td>550.0</td><td>237.9</td><td>43.255%</td><td>環保限制</td></tr><tr role="row" class="odd"><td>台中#6</td><td>550.0</td><td>239.0</td><td>43.455%</td><td>環保限制</td></tr><tr role="row" class="even"><td>台中#7</td><td>550.0</td><td>0.0</td><td>0.000%</td><td>環保停機歲修</td></tr><tr role="row" class="odd"><td>台中#8</td><td>550.0</td><td>0.0</td><td>0.000%</td><td>環保停機歲修</td></tr><tr role="row" class="even"><td>台中#9</td><td>550.0</td><td>292.6</td><td>53.200%</td><td>環保限制</td></tr><tr role="row" class="odd"><td>台中#10</td><td>550.0</td><td>289.8</td><td>52.691%</td><td>環保限制</td></tr><tr role="row" class="even"><td>興達#1(註12)</td><td>500.0</td><td>0.0</td><td>0.000%</td><td>環保停機檢修</td></tr><tr role="row" class="odd"><td>興達#2(註12)</td><td>500.0</td><td>0.0</td><td>0.000%</td><td>環保停機</td></tr><tr role="row" class="even"><td>興達#3(註12)</td><td>550.0</td><td>256.6</td><td>46.655%</td><td>環保限制</td></tr><tr role="row" class="odd"><td>興達#4(註12)</td><td>550.0</td><td>258.4</td><td>46.982%</td><td>環保限制</td></tr><tr role="row" class="even"><td>大林#1</td><td>800.0</td><td>757.9</td><td>94.738%</td><td> </td></tr><tr role="row" class="odd"><td>大林#2</td><td>800.0</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="even"><td>小計</td><td>11600.0(21.958%)</td><td>4325.4(17.576%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="cogen"></a><b>汽電共生(Co-Gen)</b></td></tr><tr role="row" class="odd"><td>汽電共生</td><td>618.0</td><td>809.5</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>小計</td><td>618.0(1.170%)</td><td>809.5(3.289%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="ippcoal"></a><b>民營電廠-燃煤(IPP-Coal)</b></td></tr><tr role="row" class="odd"><td>和平#1</td><td>648.6</td><td>597.3</td><td>92.098%</td><td>運轉限制</td></tr><tr role="row" class="even"><td>和平#2</td><td>648.6</td><td>605.3</td><td>93.331%</td><td> </td></tr><tr role="row" class="odd"><td>麥寮#1</td><td>600.0</td><td>285.9</td><td>47.650%</td><td>環保限制</td></tr><tr role="row" class="even"><td>麥寮#2</td><td>600.0</td><td>286.7</td><td>47.783%</td><td>環保限制</td></tr><tr role="row" class="odd"><td>麥寮#3</td><td>600.0</td><td>573.5</td><td>95.583%</td><td>環保限制</td></tr><tr role="row" class="even"><td>小計</td><td>3097.1(5.863%)</td><td>2348.7(9.544%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="lng"></a><b>燃氣(LNG)</b></td></tr><tr role="row" class="odd"><td>大潭CC#1</td><td>742.7</td><td>571.6</td><td>76.962%</td><td>運轉限制</td></tr><tr role="row" class="even"><td>大潭CC#2</td><td>742.7</td><td>451.8</td><td>60.832%</td><td>部分歲修</td></tr><tr role="row" class="odd"><td>大潭CC#3</td><td>724.7</td><td>679.8</td><td>93.804%</td><td> </td></tr><tr role="row" class="even"><td>大潭CC#4</td><td>724.7</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="odd"><td>大潭CC#5</td><td>724.7</td><td>681.6</td><td>94.053%</td><td> </td></tr><tr role="row" class="even"><td>大潭CC#6</td><td>724.7</td><td>665.6</td><td>91.845%</td><td> </td></tr><tr role="row" class="odd"><td>大潭CC#7</td><td>600.0</td><td>0.0</td><td>0.000%</td><td>停機 </td></tr><tr role="row" class="even"><td>通霄CC#1</td><td>892.6</td><td>941.4</td><td>105.467%</td><td> </td></tr><tr role="row" class="odd"><td>通霄CC#2</td><td>892.6</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="even"><td>通霄CC#3</td><td>892.6</td><td>891.1</td><td>99.832%</td><td> </td></tr><tr role="row" class="odd"><td>通霄CC#4</td><td>386.0</td><td>249.0</td><td>64.508%</td><td> </td></tr><tr role="row" class="even"><td>通霄CC#5</td><td>386.0</td><td>196.1</td><td>50.803%</td><td>運轉限制</td></tr><tr role="row" class="odd"><td>通霄CC#6</td><td>321.2</td><td>298.4</td><td>92.902%</td><td> </td></tr><tr role="row" class="even"><td>通霄GT#9(註10)</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>興達CC#1</td><td>445.2</td><td>461.9</td><td>103.753%</td><td> </td></tr><tr role="row" class="even"><td>興達CC#2</td><td>445.2</td><td>403.6</td><td>90.658%</td><td> </td></tr><tr role="row" class="odd"><td>興達CC#3</td><td>445.2</td><td>442.3</td><td>99.351%</td><td> </td></tr><tr role="row" class="even"><td>興達CC#4</td><td>445.2</td><td>465.4</td><td>104.540%</td><td> </td></tr><tr role="row" class="odd"><td>興達CC#5</td><td>445.2</td><td>449.9</td><td>101.058%</td><td> </td></tr><tr role="row" class="even"><td>南部CC#1</td><td>288.8</td><td>145.2</td><td>50.277%</td><td>部分檢修</td></tr><tr role="row" class="odd"><td>南部CC#2</td><td>288.8</td><td>286.3</td><td>99.134%</td><td> </td></tr><tr role="row" class="even"><td>南部CC#3</td><td>288.8</td><td>297.9</td><td>103.151%</td><td> </td></tr><tr role="row" class="odd"><td>南部CC#4</td><td>251.4</td><td>233.2</td><td>92.761%</td><td> </td></tr><tr role="row" class="even"><td>大林#5</td><td>-</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>大林#6</td><td>550.0</td><td>220.2</td><td>40.036%</td><td> </td></tr><tr role="row" class="even"><td>小計</td><td>12649.0(23.944%)</td><td>9032.3(36.702%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="ipplng"></a><b>民營電廠-燃氣(IPP-LNG)</b></td></tr><tr role="row" class="odd"><td>海湖#1</td><td>450.0</td><td>399.6</td><td>88.800%</td><td>配合綠電先行</td></tr><tr role="row" class="even"><td>海湖#2</td><td>450.0</td><td>0.0</td><td>0.000%</td><td>檢修</td></tr><tr role="row" class="odd"><td>新桃#1</td><td>630.0</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="even"><td>國光#1</td><td>480.0</td><td>0.0</td><td>0.000%</td><td>檢修</td></tr><tr role="row" class="odd"><td>星彰#1</td><td>506.9</td><td>0.0</td><td>0.000%</td><td>檢修</td></tr><tr role="row" class="even"><td>星元#1</td><td>490.0</td><td>451.7</td><td>92.184%</td><td>配合綠電先行</td></tr><tr role="row" class="odd"><td>嘉惠#1</td><td>700.0</td><td>689.0</td><td>98.429%</td><td> </td></tr><tr role="row" class="even"><td>嘉惠#2</td><td>510.0</td><td>0.0</td><td>0.000%</td><td>配合綠電先行</td></tr><tr role="row" class="odd"><td>豐德#1</td><td>506.9</td><td>467.5</td><td>92.235%</td><td>配合綠電先行</td></tr><tr role="row" class="even"><td>豐德#2</td><td>506.9</td><td>498.2</td><td>98.292%</td><td> </td></tr><tr role="row" class="odd"><td>小計</td><td>5230.6(9.901%)</td><td>2506.0(10.183%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="oil"></a><b>燃油(Oil)</b></td></tr><tr role="row" class="even"><td>協和#3</td><td>500.0</td><td>135.1</td><td>27.020%</td><td>環保限制</td></tr><tr role="row" class="odd"><td>協和#4</td><td>500.0</td><td>136.6</td><td>27.320%</td><td>環保限制</td></tr><tr role="row" class="even"><td>澎湖尖山(註4)</td><td>129.8</td><td>24.7</td><td>19.029%</td><td>部分歲修</td></tr><tr role="row" class="odd"><td>小計</td><td>1129.8(2.139%)</td><td>296.4(1.204%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="diesel"></a><b>輕油(Diesel)</b></td></tr><tr role="row" class="even"><td>核二Gas1</td><td>-</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>核二Gas2</td><td>-</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>核三Gas1</td><td>-</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>核三Gas2</td><td>-</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>台中Gas1&amp;2</td><td>140.0</td><td>0.0</td><td>0.000%</td><td>部分檢修</td></tr><tr role="row" class="odd"><td>台中Gas3&amp;4</td><td>140.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>金門塔山(註4)</td><td>113.3</td><td>41.2</td><td>36.366%</td><td> </td></tr><tr role="row" class="odd"><td>馬祖珠山(註4)</td><td>28.6</td><td>9.4</td><td>32.821%</td><td> </td></tr><tr role="row" class="even"><td>離島其他(註4)</td><td>40.8</td><td>N/A</td><td>N/A</td><td> </td></tr><tr role="row" class="odd"><td>小計(註5)</td><td>462.7(0.876%)</td><td>50.6(0.206%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="hydro"></a><b>水力(Hydro)</b></td></tr><tr role="row" class="even"><td>德基#1</td><td>78.0</td><td>50.6</td><td>64.872%</td><td> </td></tr><tr role="row" class="odd"><td>德基#2</td><td>78.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>德基#3</td><td>78.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>青山#1</td><td>92.0</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="even"><td>青山#2</td><td>92.0</td><td>88.2</td><td>95.870%</td><td> </td></tr><tr role="row" class="odd"><td>青山#3</td><td>92.0</td><td>0.0</td><td>0.000%</td><td>檢修</td></tr><tr role="row" class="even"><td>青山#4</td><td>92.0</td><td>0.0</td><td>0.000%</td><td>檢修</td></tr><tr role="row" class="odd"><td>谷關#1</td><td>54.4</td><td>45.3</td><td>83.196%</td><td> </td></tr><tr role="row" class="even"><td>谷關#2</td><td>54.4</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>谷關#3</td><td>54.4</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>谷關#4</td><td>54.4</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>天輪#1</td><td>22.5</td><td>21.0</td><td>93.333%</td><td> </td></tr><tr role="row" class="even"><td>天輪#2</td><td>22.5</td><td>0.0</td><td>0.000%</td><td>檢修</td></tr><tr role="row" class="odd"><td>天輪#3</td><td>22.5</td><td>20.8</td><td>92.444%</td><td> </td></tr><tr role="row" class="even"><td>天輪#4</td><td>22.5</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>天輪#5</td><td>105.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>馬鞍#1</td><td>66.7</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>馬鞍#2</td><td>66.7</td><td>24.8</td><td>37.159%</td><td> </td></tr><tr role="row" class="even"><td>卓蘭#1</td><td>40.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>卓蘭#2</td><td>40.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>萬大#1</td><td>10.4</td><td>9.9</td><td>95.652%</td><td> </td></tr><tr role="row" class="odd"><td>萬大#2</td><td>10.4</td><td>9.8</td><td>94.686%</td><td> </td></tr><tr role="row" class="even"><td>萬大#3</td><td>15.3</td><td>3.4</td><td>22.222%</td><td> </td></tr><tr role="row" class="odd"><td>萬大#4</td><td>19.7</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>松林#1&amp;2</td><td>20.9</td><td>9.1</td><td>43.541%</td><td> </td></tr><tr role="row" class="odd"><td>大觀一#1</td><td>22.0</td><td>3.3</td><td>15.000%</td><td> </td></tr><tr role="row" class="even"><td>大觀一#2</td><td>22.0</td><td>3.0</td><td>13.636%</td><td> </td></tr><tr role="row" class="odd"><td>大觀一#3</td><td>22.0</td><td>2.9</td><td>13.182%</td><td> </td></tr><tr role="row" class="even"><td>大觀一#4</td><td>22.0</td><td>2.8</td><td>12.727%</td><td> </td></tr><tr role="row" class="odd"><td>大觀一#5</td><td>22.0</td><td>3.4</td><td>15.455%</td><td> </td></tr><tr role="row" class="even"><td>鉅工#1</td><td>21.8</td><td>2.2</td><td>10.115%</td><td> </td></tr><tr role="row" class="odd"><td>鉅工#2</td><td>21.8</td><td>3.7</td><td>17.011%</td><td> </td></tr><tr role="row" class="even"><td>水里#1</td><td>12.8</td><td>2.7</td><td>21.176%</td><td> </td></tr><tr role="row" class="odd"><td>立霧#1&amp;#2</td><td>32.0</td><td>11.0</td><td>34.375%</td><td>部分歲修</td></tr><tr role="row" class="even"><td>龍澗#1</td><td>48.6</td><td>30.5</td><td>62.757%</td><td> </td></tr><tr role="row" class="odd"><td>龍澗#2</td><td>48.6</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>碧海</td><td>61.2</td><td>33.8</td><td>55.229%</td><td> </td></tr><tr role="row" class="odd"><td>烏來&amp;桂山&amp;粗坑</td><td>40.5</td><td>19.9</td><td>49.136%</td><td> </td></tr><tr role="row" class="even"><td>北部小水力(註6)</td><td>26.6</td><td>N/A</td><td>N/A</td><td> </td></tr><tr role="row" class="odd"><td>中部小水力(註6)</td><td>13.8</td><td>N/A</td><td>N/A</td><td> </td></tr><tr role="row" class="even"><td>南部小水力(註6)</td><td>7.2</td><td>N/A</td><td>N/A</td><td> </td></tr><tr role="row" class="odd"><td>東部小水力(註6)</td><td>54.6</td><td>31.0</td><td>56.777%</td><td> </td></tr><tr role="row" class="even"><td>翡翠#1</td><td>70.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>石門#1</td><td>45.0</td><td>45.0</td><td>100.000%</td><td> </td></tr><tr role="row" class="even"><td>石門#2</td><td>45.0</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="odd"><td>曾文#1</td><td>50.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>義興#1</td><td>40.0</td><td>12.3</td><td>30.750%</td><td> </td></tr><tr role="row" class="odd"><td>名間</td><td>16.7</td><td>4.6</td><td>27.545%</td><td> </td></tr><tr role="row" class="even"><td>嘉南西口、烏山頭和八田</td><td>22.5</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>后里示範</td><td>0.1</td><td>N/A</td><td>N/A</td><td> </td></tr><tr role="row" class="even"><td>卑南</td><td>2.0</td><td>1.0</td><td>50.505%</td><td> </td></tr><tr role="row" class="odd"><td>捷祥關山</td><td>1.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>小計</td><td>2096.5(3.969%)</td><td>512.5(2.082%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="wind"></a><b>風力(Wind)</b></td></tr><tr class="dtrg-group dtrg-start dtrg-level-1"><td colspan="5">陸域風力台電自有(註13)</td></tr><tr role="row" class="odd"><td>觀園</td><td>30.0</td><td>14.3</td><td>47.667%</td><td> </td></tr><tr role="row" class="even"><td>台中港</td><td>26.0</td><td>3.3</td><td>12.692%</td><td> </td></tr><tr role="row" class="odd"><td>王功</td><td>23.0</td><td>10.6</td><td>46.087%</td><td> </td></tr><tr role="row" class="even"><td>彰工</td><td>71.2</td><td>16.2</td><td>22.753%</td><td> </td></tr><tr role="row" class="odd"><td>雲麥</td><td>46.0</td><td>8.4</td><td>18.261%</td><td> </td></tr><tr role="row" class="even"><td>四湖</td><td>28.0</td><td>3.6</td><td>12.857%</td><td> </td></tr><tr role="row" class="odd"><td>其它台電自有</td><td>72.8</td><td>21.0</td><td>28.830%</td><td> </td></tr><tr class="dtrg-group dtrg-start dtrg-level-1"><td colspan="5">陸域風力購電(註13)</td></tr><tr role="row" class="even"><td>苗栗大鵬</td><td>42.0</td><td>1.2</td><td>2.800%</td><td> </td></tr><tr role="row" class="odd"><td>鹿威彰濱</td><td>55.2</td><td>11.2</td><td>20.290%</td><td> </td></tr><tr role="row" class="even"><td>觀威觀音&amp;桃威新屋</td><td>48.3</td><td>12.6</td><td>26.087%</td><td> </td></tr><tr role="row" class="odd"><td>中威大安</td><td>75.9</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>創維風(註10)</td><td>-</td><td>24.4</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>其它購電風力</td><td>178.4</td><td>16.0</td><td>8.969%</td><td> </td></tr><tr class="dtrg-group dtrg-start dtrg-level-1"><td colspan="5">離岸風力台電自有(註13)</td></tr><tr role="row" class="even"><td>離岸一期</td><td>109.2</td><td>80.4</td><td>73.626%</td><td> </td></tr><tr class="dtrg-group dtrg-start dtrg-level-1"><td colspan="5">離岸風力購電(註13)</td></tr><tr role="row" class="odd"><td>海洋竹南</td><td>128.0</td><td>26.0</td><td>20.312%</td><td> </td></tr><tr role="row" class="even"><td>允湖(註10)</td><td>-</td><td>108.1</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>沃一風(註10)</td><td>-</td><td>56.8</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>沃二風(註10)</td><td>-</td><td>56.3</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>芳一風(註10)</td><td>-</td><td>9.2</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>海能風(註10)</td><td>-</td><td>162.1</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>小計</td><td>934.0(1.768%)</td><td>641.7(2.608%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="solar"></a><b>太陽能(Solar)</b></td></tr><tr class="dtrg-group dtrg-start dtrg-level-1"><td colspan="5">太陽能台電自有(註13)</td></tr><tr role="row" class="even"><td>彰濱光</td><td>100.0</td><td>0.000</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>南鹽光</td><td>150.0</td><td>0.000</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>其它台電自有</td><td>23.6</td><td>0.000</td><td>0.000%</td><td> </td></tr><tr class="dtrg-group dtrg-start dtrg-level-1"><td colspan="5">太陽能購電(註13)</td></tr><tr role="row" class="odd"><td>崙尾光</td><td>181.0</td><td>0.000</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>天衝光</td><td>116.5</td><td>0.000</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>天篷光</td><td>80.0</td><td>0.000</td><td>0.000%</td><td> </td></tr><tr role="row" class="even"><td>寶興光(註10)</td><td>-</td><td>0.000</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>向陽光(註10)</td><td>-</td><td>0.000</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>星崴光(註10)</td><td>-</td><td>0.000</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>碩力光(註10)</td><td>-</td><td>0.000</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>其它購電太陽能</td><td>8856.4</td><td>0.000</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>小計</td><td>9507.5(17.997%)</td><td>0.0(0.000%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="pumpinggen"></a><b>抽蓄發電(Pumping Gen)</b></td></tr><tr role="row" class="even"><td>大觀二#1</td><td>250.0</td><td>0.0</td><td>0.000%</td><td> </td></tr><tr role="row" class="odd"><td>大觀二#2</td><td>250.0</td><td>193.0</td><td>77.200%</td><td> </td></tr><tr role="row" class="even"><td>大觀二#3</td><td>250.0</td><td>192.0</td><td>76.800%</td><td> </td></tr><tr role="row" class="odd"><td>大觀二#4</td><td>250.0</td><td>0.0</td><td>0.000%</td><td>歲修</td></tr><tr role="row" class="even"><td>明潭#1</td><td>267.0</td><td>170.2</td><td>63.745%</td><td> </td></tr><tr role="row" class="odd"><td>明潭#2</td><td>267.0</td><td>162.5</td><td>60.861%</td><td> </td></tr><tr role="row" class="even"><td>明潭#3</td><td>267.0</td><td>0.0</td><td>0.000%</td><td>檢修</td></tr><tr role="row" class="odd"><td>明潭#4</td><td>267.0</td><td>163.5</td><td>61.236%</td><td> </td></tr><tr role="row" class="even"><td>明潭#5</td><td>267.0</td><td>163.8</td><td>61.348%</td><td> </td></tr><tr role="row" class="odd"><td>明潭#6</td><td>267.0</td><td>161.8</td><td>60.599%</td><td> </td></tr><tr role="row" class="even"><td>小計</td><td>2602.0(4.925%)</td><td>1206.8(4.904%)</td><td></td><td></td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="pumpingload"></a><b>抽蓄負載(Pumping Load)</b></td></tr><tr role="row" class="odd"><td>大觀二#1</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>大觀二#2</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>大觀二#3</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>大觀二#4</td><td>-</td><td>0.0</td><td>-</td><td>歲修</td></tr><tr role="row" class="odd"><td>明潭#1</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>明潭#2</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>明潭#3</td><td>-</td><td>0.0</td><td>-</td><td>檢修</td></tr><tr role="row" class="even"><td>明潭#4</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="odd"><td>明潭#5</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr role="row" class="even"><td>明潭#6</td><td>-</td><td>0.0</td><td>-</td><td> </td></tr><tr class="dtrg-group dtrg-start dtrg-level-0"><td colspan="5"><a name="OtherRenewableEnergy"></a><b>其它再生能源(Other Renewable Energy)</b></td></tr><tr role="row" class="odd"><td>地熱(Geothermal)</td><td>5.4</td><td>2.7</td><td>49.550%</td><td> </td></tr><tr role="row" class="even"><td>生質能(Biofuel)</td><td>7.6</td><td>3.9</td><td>51.370%</td><td> </td></tr><tr role="row" class="odd"><td>小計</td><td>13.0(0.025%)</td><td>6.6(0.027%)</td><td></td><td></td></tr></tbody>
+</table></div>
+<br>
+<br>
+<br>
+<table class="rm" width="100%" cellspacing="0" cellpadding="0" border="0">
+  <tbody><tr>
+    <th scope="row" width="5%" valign="top" nowrap="nowrap" align="right">註1：</th>
+    <td width="95%">
+	<div class="remarks">
+	裝置容量：通常以構成該機組之原動機或發電機之設計容量(名牌所列發定額容量)稱之（取用二者中較小者），如以系統而論，則為該系統所有發電廠裝置容量之和。唯，民營電廠依購售電合約，裝置容量以各機組之簽約容量計。</div>
+	<br>
+	</td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註2：</th>
+    <td>
+		<div class="remarks">
+		淨發電量：發電廠發電機所產生之電能，電力系統上屬於公司發電廠之輸出電能。(廠毛發電量 - 廠內用電)</div><br>
+	</td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註3：</th>
+    <td>
+		淨發電量高於裝置容量之說明：<br>
+		<div class="remarksa">(1)因核能機組完成提升出力改善計畫，致實際發電能力超出原規劃裝置容量。 </div>
+		<div class="remarksa">(2)部分火力機組因機組配件升級、環境溫度較低、機組效能測試等因素之影響，致使淨發電量可能高於裝置容量，惟大多屬短暫性現象，亦不影響台電與民營電廠之全年合約購電量。</div>
+		<div class="remarksa">(3)本公司所購入汽電共生係為餘電收購，有淨發電量貢獻，其中垃圾及沼氣計入裝置容量，其餘不計入本公司系統裝置容量。</div>
+		<br>
+	</td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註4：</th>
+		<td>澎湖尖山：僅含澎湖本島尖山電廠。	<br>
+		金門塔山：含大、小金門所有電廠。<br>
+		馬祖珠山：只含南竿、北竿及珠山等電廠。<br>
+		<div class="remarks">離島其他：含蘭嶼、綠島、小琉球、連江縣[馬祖]離島（東引、東莒、西莒）及澎湖縣離島(七美、望安、虎井，但不含吉貝、鳥嶼)等電廠。</div>
+		※顯示之發電量為毛發電量。
+		<br>
+		<br>
+	</td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註5：</th>
+    <td>核能電廠全黑起動氣渦輪機，其淨尖峰能力23.3萬瓩，但其裝置容量不計入台電系統裝置容量，發電量計入燃油(輕油)發電。<br><br></td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註6：</th>
+    <td>北部小水力: 圓山、天埤、軟橋。<br>
+      中部小水力: 后里、社寮、景山、北山、濁水。 <br>
+      南部小水力: 六龜、竹門。 <br>
+    東部小水力: 銅門、龍溪、水簾、清水、清流、初英、榕樹、溪口、東興。<br><br></td>
+  </tr>
+  <!--<tr>
+    <th align="right" valign="top" nowrap="nowrap" scope="row">註7：</th>
+    <td>離島風力含澎湖中屯、金門金沙、澎湖湖西。<br /><br /></td>
+  </tr>
+  <tr>-->
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註7：</th>
+    <td>太陽能購電：所顯示之發電量係參考購電取樣發電量分區比例估算得出。購售電件數請參考本公司首頁：資訊揭露-&gt;發電資訊-&gt;購入電力概況-&gt;<a href="http://www.taipower.com.tw/tc/page.aspx?mid=207&amp;cid=164&amp;cchk=1878dc90-ab48-4069-b940-2014dd410bef" target="_blank">購入電力分布情形</a>。<br><br></td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註8：</th>
+    <td>淨發電量若標示為N/A，表示無即時資訊。<br><br></td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註9：</th>
+    <td>本網頁資料為每10分鐘更新，請重新整理頁面，可顯示最新資訊。<br><br></td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註10：</th>
+    <td>電廠(機組)換發/取得電業執照前進行測試(試運轉)等程序時，該電廠(機組)暫不計入裝置容量且不揭露其發電百分比。<br><br></td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註11：</th>
+    <td>
+		備註欄補充說明：<br>
+		<div class="remarksa">(1)水文限制：配合水資源局下游用水需求限制，或排洪排砂。	</div>
+		<div class="remarksa">(2)燃料限制：發電廠年度天然氣燃料用量限制，或儲量限制。</div>
+		<div class="remarksa">(3)環保限制：配合環保單位年度排放限制。</div>
+		<div class="remarksa">(4)空污減載：因應 PM2.5 環境友善降載。</div>
+		<div class="remarksa">(5)環保停機(檢修)：本公司因應季節性區域空氣品質不良，在評估停機後，系統仍可維持供電安全，安排環保停機(檢修)。</div>
+		<div class="remarksa">(6)運轉限制：發電機組輔機相關設備等故障限制。</div>
+		<div class="remarksa">(7)EOH限制：發電機組有效運轉時數(EOH)限制。</div>
+		<div class="remarksa">(8)部分歲修：複循環發電機組部分歲修。</div>
+		<div class="remarksa">(9)部分檢修：複循環發電機組部分檢修。</div>
+		<div class="remarksa">(10)部分故障：複循環發電機組部分故障。</div>
+		<div class="remarksa">(11)合約限制：與民營電廠合約(PPA)限制。</div>
+		<div class="remarksa">(12)電源線限制：發電廠電源線安全限制。</div>
+		<div class="remarksa">(13)機組安檢：機組依原製造廠家規定，於其運轉累計達一定時數時，須實施必要之安檢。</div>
+		<div class="remarksa">(14)輔機檢修：相關輔機設備功能異常必須停用檢修，以致發電出力受限。</div>
+		<div class="remarksa">(15)外溫高限制：因氣溫高機組出力受限。</div>
+		<div class="remarksa">(16)歲修逾排程：機組歲修因設備或其他因素，超過原排程工期。</div>
+		<div class="remarksa">(17)測試停機：機組歲、檢修後因必要測試停機或試俥機組停機。</div>
+		<div class="remarksa">(18)測試運轉：機組歲、檢修後運轉測試，或依規定之定期降載測試。</div>
+		<br>
+	</td>
+  </tr>
+  <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註12：</th>
+    <td>依高雄市環保局108.09.20核發之操作許可證，興達電廠2部燃煤機組於秋冬空品不良季節（10月至翌年3月）停機，另2部機組平均生煤用量削減至65%；如因用電需求指令機組升載超過65%時，將另於適當時機調度降載，以維持2部機平均負載65%為原則，並定期追蹤管控，以符合生煤減量之環保責任。<br><br></td>
+  </tr>
+   <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註13：</th>
+    <td>裝置容量20MW以上且併接電壓等級69仟伏以上之機組單獨呈現，其餘則整併一筆資料。<br><br></td>
+  </tr>
+   <tr>
+    <th scope="row" valign="top" nowrap="nowrap" align="right">註14：</th>
+    <td>大林#5機111年12月31日除役。<br><br></td>
+  </tr>
+</tbody></table>
+</div>
+</div>
+</div> <!--end of container-->
+<div align="right"><a href="#"><img src="./images/go-top.png" style="margin:0px 0 0 116px;" border="0"></a></div> <br>
+
+<div class="ui-widget">
+	<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+		<p>	<b>
+		以上資料係由調度即時系統取得，相關資料可能因系統維護、資料之設定、傳輸等因素，會與實際數值有些許誤差，相關實際資料請以台電正式公布為準。
+		</b></p>
+  </div>
+</div>
+<script async="" src="//www.google-analytics.com/analytics.js"></script><script>
+setInterval(reTick, 300000);
+function reTick() {
+	location.reload(true);
+}
+    (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function() {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-38594873-1', 'auto');
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview');
+//window.parent.iframe_resize();
+</script>
+
+	<script src="js/jquery-360.min.js"></script>
+	
+	<script type="text/javascript" language="javascript" src="js/1jquery10.dataTables21.min.js"></script>
+	<script type="text/javascript" language="javascript" src="js/dataTables.rowGroup.min.js"></script>
+    <script type="text/javascript" language="javascript" src="js/FixedHeader.js"></script>
+    <script src="bslib/3/bootstrap.min.js"></script>
+	<script type="text/javascript" language="javascript" charset="utf-8">
+
+	$(document).ready(function() {
+			var ssumAry = [];
+			var ssumPercentAry = [];
+			var cnt = 0;
+			var regExp = /\(([^)]+)\)/;
+			var perStr = null;
+			var sysSpSum = 0.0;
+			var pumpSum = 0.0;
+
+			$.getJSON("data/genary.json", function(gadata){
+
+			for(oidx in gadata){
+				line = gadata[oidx];
+		        array = line.split(',');
+		        getmsg2=array[0].replace(/\"/g,'');
+		        getmsg=getmsg2.replace("{:",'');
+		    	$("#datetime").text(getmsg);
+				break;
+			}
+
+			$.each(gadata.aaData, function(i,v){
+					if( v[2].indexOf("小計") != -1 ){
+						//ssumAry.push(v[3].split("(")[0]+" MW");
+						ssumAry.push(v[4].split("(")[0]+" ");
+						perStr = regExp.exec(v[4]);
+						ssumPercentAry.push(perStr[1]);
+						cnt++;
+						return;
+					}
+					// if( v[1].indexOf("Pumping Load") != -1 ){
+					if( v[0].indexOf("Pumping Load") != -1 ){
+						pumpSum = pumpSum + Number(v[4]);					
+					}
+			});
+
+			for ( var xop = 0; xop < ssumAry.length ; xop++) {
+				$("#item"+xop).text(ssumAry[xop]);
+				sysSpSum=sysSpSum + Number(ssumAry[xop]);
+			}
+
+			for ( var iop = 0; iop < ssumPercentAry.length ; iop++) {
+				$(".bar-lb-"+iop).append("<span style='color: #4d4d4d; margin: auto 0 auto 1em; '\>" +ssumPercentAry[iop]+"</span>");
+			}
+			
+			sysSpSum = sysSpSum + pumpSum;
+			$("#nestSumId").text(Math.floor(sysSpSum));
+
+
+			$(".bar-0").css({"width": ssumPercentAry[0], "background-color" : "#CC0099"}); $(".bar-1").css({"width": ssumPercentAry[1], "background-color" : "#E65C00"});
+			$(".bar-2").css({"width": ssumPercentAry[2], "background-color" : "#E6E600"}); $(".bar-3").css({"width": ssumPercentAry[3], "background-color" : "#FFA347"});
+			$(".bar-4").css({"width": ssumPercentAry[4], "background-color" : "#006600"}); $(".bar-5").css({"width": ssumPercentAry[5], "background-color" : "#5EDFDF"});
+			$(".bar-6").css({"width": ssumPercentAry[6], "background-color" : "#FF1919"}); $(".bar-7").css({"width": ssumPercentAry[7], "background-color" : "#848484"});
+			$(".bar-8").css({"width": ssumPercentAry[8], "background-color" : "#0000B2"}); $(".bar-9").css({"width": ssumPercentAry[9], "background-color" : "#009933"});
+			$(".bar-10").css({"width": ssumPercentAry[10], "background-color" : "#00CC00"}); $(".bar-11").css({"width": ssumPercentAry[11], "background-color" : "#3366CC"});
+			$(".bar-12").css({"width": ssumPercentAry[12], "background-color" : "#3366CC"});
+				$(document).bind("contextmenu",function(event){return false;});
+							
+				$.fn.DataTable.ext.sErrMode = "throw";			
+
+				var oTable = $('#unitgentab').DataTable( {
+					"data" : gadata.aaData,
+				    "columns": [
+				        { width: "5%", data:  0, visible:    false },
+				        { width: "5%", data:  1, visible:    false },
+				        { width: "15%", data: 2, searchable: true  },
+				        { width: "15%", data: 3},
+				        { width: "15%", data: 4 },
+				        { width: "15%", data: 5 },
+				        { width: "15%", data: 6, visible: true}
+				    ],
+				    "rowGroup": {
+				        "dataSrc": ["0","1"],
+				        // "className": "test-table-group",
+				        "emptyDataGroup": null
+				    },				    
+									"bProcessing": true,					
+									"bJQueryUI": true,
+							    	"bLengthChange": false,
+									"bPaginate": false,
+									"bSort": false,
+									"bAutoWidth": false,
+									"bInfo": false,								
+									"sDom": "lrtip" ,
+									"oLanguage": {
+				                    "sZeroRecords": "尚無資料",
+				                    "sProcessing": "資料載入中..."},
+							}); // End of datatable				
+			}); // End of getJSON
+	});  // End of doc.ready
+	</script>
+
+</body></html>
