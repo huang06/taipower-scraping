@@ -8,7 +8,7 @@ from selenium import webdriver
 logger = logging.getLogger(__name__)
 
 
-def get_driver(browser: str = "firefox", remote_url: str | None = None) -> Any:
+def get_driver(browser: str, remote_url: str | None = None) -> Any:
     driver_dict = {
         "firefox": webdriver.Firefox,
         "chrome": webdriver.Chrome,
