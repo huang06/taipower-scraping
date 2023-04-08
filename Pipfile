@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 beautifulsoup4 = "==4.12.2"
+lxml = "==4.9.2"
 matplotlib = "==3.7.1"
 pandas = "==2.0.0"
 selenium = "==4.8.3"

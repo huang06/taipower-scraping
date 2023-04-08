@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 
 def extract_values_in_pagesource(html_path: Path) -> dict:
-    soup = BeautifulSoup(html_path.read_text(encoding="utf-8"), "html.parser")
+    soup = BeautifulSoup(html_path.read_text(encoding="utf-8"), "lxml")
 
     datetime_ = datetime.datetime.strptime(
         soup.find("a", id="datetime").text, "%Y-%m-%d %H:%M"
