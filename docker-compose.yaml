@@ -2,7 +2,7 @@
 version: '3'
 services:
   firefox:
-    image: docker.io/selenium/standalone-firefox:4.4.0
+    image: docker.io/selenium/standalone-firefox:4.8.3
     shm_size: 2gb
     container_name: selenium-hub
     ports:
