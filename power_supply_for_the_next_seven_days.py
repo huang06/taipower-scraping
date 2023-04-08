@@ -17,18 +17,20 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-logger.info("Connecting to selenium hub")
+logger.info("Connecting to the Selenium hub")
 driver = webdriver.Remote(
     command_executor='http://127.0.0.1:4444/wd/hub',
     options=webdriver.FirefoxOptions(),
 )
 
 try:
-    logger.info("Connecting to the page")
     cht_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/load_forecast_.html?mid=209&cid=357&cchk=2fd2f12d-f009-43c5-9a41-150e39c214b9"  # noqa: E501
+    logger.info("Connecting to the page: %s", cht_url)
     driver.get(cht_url)
     driver.implicitly_wait(5)
 
+    title = driver.title
+    logger.info("Page title: %s", title)
     datetime_repr = (
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "datetime"))).text
     )  # '111/09/17'
