@@ -8,14 +8,12 @@ on:
 
 jobs:
   scrape-power-info:
-    runs-on: ubuntu-latest
-    services:
-      selenium:
-        image: selenium/standalone-firefox:4.8.3
-        ports:
-          - 4444:4444
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
+      - uses: nanasess/setup-chromedriver@v2
+        with:
+          chromedriver-version: '111.0.5563.64'
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
