@@ -1,9 +1,9 @@
 ---
 version: '3'
 services:
-  firefox:
-    image: docker.io/selenium/standalone-firefox:4.8.3
-    shm_size: 2gb
-    container_name: selenium-hub
+  selenium:
+    image: docker.io/selenium/standalone-chrome:4.8.3
+    environment:
+      - SE_VNC_NO_PASSWORD=1
     ports:
       - "4444:4444"

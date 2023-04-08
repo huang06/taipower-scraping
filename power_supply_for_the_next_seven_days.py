@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import datetime
 import logging
 import os
@@ -10,6 +11,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--remote", action="store_true")
+args = parser.parse_args()
+
 LOGLEVEL = os.environ.get("LOGLEVEL", "INFO").upper()
 logging.basicConfig(
     level=LOGLEVEL,
@@ -17,11 +22,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-logger.info("Connecting to the Selenium hub")
-driver = webdriver.Remote(
-    command_executor='http://127.0.0.1:4444/wd/hub',
-    options=webdriver.FirefoxOptions(),
-)
+if args.remote:
+    remote_url = "http://127.0.0.1:4444/wd/hub"
+    logger.info("Connecting to the Selenium hub: %s", remote_url)
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Remote(
+        command_executor=remote_url,
+        options=options,
+    )
+else:
+    logger.info("Using the local driver")
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    driver = webdriver.Chrome(options=options)
 
 try:
     cht_url = "https://www.taipower.com.tw/d006/loadGraph/loadGraph/load_forecast_.html?mid=209&cid=357&cchk=2fd2f12d-f009-43c5-9a41-150e39c214b9"  # noqa: E501
