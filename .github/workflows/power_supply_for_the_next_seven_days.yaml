@@ -28,3 +28,4 @@ jobs:
           author_name: huang06
           branch: 'main'
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          directory: './data'
