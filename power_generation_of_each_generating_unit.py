@@ -64,5 +64,8 @@ try:
     data_dir = pathlib.Path(__file__).resolve().parent / "data" / f"{datetime_:%Y%m%d}"
     data_dir.mkdir(parents=True, exist_ok=True)
     (data_dir / f"{datetime_:%Y%m%d%H%M}.html").write_text(html)
+except Exception:
+    html = driver.page_source
+    logger.error("%s", html)
 finally:
     driver.quit()
