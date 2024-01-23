@@ -4,7 +4,7 @@ Scraping real-time power information from Taipower website.
 
 ## Motivation
 
-[Taipower](https://www.taipower.com.tw) updates electricity consumption and generation information every 10 minutes on its website. However, historical records are not available for download. To address this, I developed GitHub workflows that automatically collect the data at regular intervals and save it in this repository for future analytical purposes.
+[Taipower](https://www.taipower.com.tw) updates the power generation data of various power plants every 15 minutes on its website, but does not offer the option to download historical data. This repository addresses this issue by using Selenium to collect data every 15 minutes for subsequent data analysis needs.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ Launch a Selenium worker.
 docker compose up -d
 ```
 
-Install Python packages.
+Install Python packages and activate the virtualenv.
 
 ```bash
 python3 -m pip install pipenv
