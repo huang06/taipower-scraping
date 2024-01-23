@@ -8,8 +8,8 @@ Scraping real-time power information from Taipower website.
 
 ## Prerequisites
 
-- Python3 (tested with 3.10.10)
 - Docker
+- Python3 (tested with 3.10)
 
 ## Usage
 
@@ -33,37 +33,4 @@ Execute the scripts.
 python3 power_generation_of_each_generating_unit.py --remote
 
 python3 power_supply_for_the_next_seven_days.py --remote
-```
-
-## Development Guide
-
-### Selenium Grid
-
-Start a Selenium Grid container.
-
-```bash
-docker compose up -d
-```
-
-For detailed usage of Selenium Grid, see <https://github.com/SeleniumHQ/docker-selenium>.
-
-### Python
-
-```bash
-python3 -m pip install pipenv
-pipenv install --dev -v
-```
-
-### pre-commit
-
-```bash
-pre-commit install
-pre-commit install -t commit-msg
-```
-
-### Cleanup
-
-```bash
-docker compose down -v
-rm -rf .venv
 ```
