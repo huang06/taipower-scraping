@@ -13,7 +13,7 @@ Scraping real-time power information from Taipower website.
 
 ## Usage
 
-Launch a Selenium hub.
+Launch a Selenium worker.
 
 ```bash
 docker compose up -d
@@ -27,7 +27,7 @@ pipenv install
 pipenv shell
 ```
 
-Execute the scripts.
+Execute the following scripts to download website data.
 
 ```bash
 python3 power_generation_of_each_generating_unit.py --remote
